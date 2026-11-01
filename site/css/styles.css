@@ -240,6 +240,16 @@ body {
   flex-shrink: 0;
 }
 
+.language-switch {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.lang-switch[aria-current] {
+  border-color: var(--vh-cyan-bright);
+  background: rgba(56, 189, 248, 0.2);
+}
+
 .lang-switch,
 .audio-btn {
   appearance: none;
@@ -253,6 +263,7 @@ body {
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
