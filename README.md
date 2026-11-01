@@ -15,28 +15,32 @@ storage is available; an explicit language link always takes priority.
 [English website](https://dvoineu.github.io/VoiceHelper-downloads/?lang=en) ·
 [Сайт на русском](https://dvoineu.github.io/VoiceHelper-downloads/?lang=ru)
 
+[Changelog](CHANGELOG.md) · [What’s new on the website](https://dvoineu.github.io/VoiceHelper-downloads/#whats-new)
+
 Release notes include full English and Russian sections. Their reviewed source
 is kept in [docs/releases/](docs/releases/). The same app installer includes
 both interface languages.
 
 ## Download and install
 
-VoiceHelper 1.1 (build 3) requires **macOS 13+ and Apple Silicon (M1 or later)**.
+VoiceHelper 1.1 (build 4) requires **macOS 13+ and Apple Silicon (M1 or later)**.
 The application is Developer ID signed and Apple notarized. This release does
 not include an Intel build or an automatic updater.
 
-- [Download DMG](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.dmg)
-- [Download ZIP](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.zip)
-- [Installation instructions / Инструкция установки](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/INSTALL.txt)
-- [SHA-256 checksums](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/SHA256SUMS)
+- [Download DMG](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.dmg)
+- [Download ZIP](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.zip)
+- [Installation instructions / Инструкция установки](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/INSTALL.txt)
+- [SHA-256 checksums](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/SHA256SUMS)
 
 Open the DMG (or extract the ZIP), drag VoiceHelper.app into Applications, and
-launch it. Allow Microphone and Accessibility, download a local recognition
-model in Settings, focus a text field and press Option-Space to dictate.
+launch it. Follow setup for Microphone and Accessibility, choose recognition,
+and try a phrase in its test field. Setup can be resumed or reopened from the menu.
+Existing settings, API keys and downloaded models are preserved.
 
 Скачайте DMG или ZIP, перенесите VoiceHelper.app в «Программы» и запустите.
-Разрешите микрофон и «Универсальный доступ», скачайте модель в настройках.
-Установите курсор в текстовое поле и нажмите Option-Пробел для диктовки.
+Пройдите мастер доступа к микрофону, универсального доступа и распознавания,
+затем продиктуйте пробную фразу. Мастер можно продолжить или открыть из меню;
+настройки, API-ключи и скачанные модели сохраняются.
 
 To verify downloaded files, put them beside SHA256SUMS and run:
 

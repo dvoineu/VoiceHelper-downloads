@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
@@ -9,7 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE_DIR = ROOT / "site"
 PUBLIC_SITE = "https://dvoineu.github.io/VoiceHelper-downloads/"
 PUBLIC_REPO = "https://github.com/dvoineu/VoiceHelper-downloads"
-RELEASE = PUBLIC_REPO + "/releases/download/v1.1-build.3/"
+RELEASE = PUBLIC_REPO + "/releases/download/v1.1-build.4/"
 
 
 class SemanticHTMLInspector(HTMLParser):
@@ -158,8 +159,8 @@ class VoiceHelperSiteTests(unittest.TestCase):
         inspector.feed(html)
         buttons = {a.get("data-i18n"): a for a in inspector.anchors}
         for key, filename in {
-            "dlBtnDmg": "VoiceHelper-1.1-3-arm64.dmg",
-            "dlBtnZip": "VoiceHelper-1.1-3-arm64.zip",
+            "dlBtnDmg": "VoiceHelper-1.1-4-arm64.dmg",
+            "dlBtnZip": "VoiceHelper-1.1-4-arm64.zip",
             "dlInstall": "INSTALL.txt",
             "dlChecksums": "SHA256SUMS",
         }.items():
@@ -219,6 +220,19 @@ class VoiceHelperSiteTests(unittest.TestCase):
         self.assertEqual(json.loads((SITE_DIR / "site.webmanifest").read_text())["lang"], "en")
         website = json.loads(inspector.json_ld_blocks[0])["@graph"][0]
         self.assertEqual(website["inLanguage"], ["en", "ru"])
+
+    def test_current_release_has_visible_bilingual_change_list(self):
+        html = (SITE_DIR / "index.html").read_text()
+        dictionary = (SITE_DIR / "js/i18n.js").read_text()
+        self.assertIn('id="whats-new"', html)
+        self.assertIn('>What’s new in VoiceHelper</h2>', html)
+        for key in ["newKicker", "newTitle", "newSubtitle", "newSetupTitle", "newSetupBody",
+                    "newTrialTitle", "newTrialBody", "newModelTitle", "newModelBody", "newPreserved", "newFullNotes"]:
+            self.assertIn('data-i18n="' + key + '"', html)
+            self.assertEqual(len(re.findall(r'\b' + key + r':\s*[\'\"][^\'\"]+', dictionary)), 2, key)
+        self.assertIn(PUBLIC_REPO + "/releases/tag/v1.1-build.4", html)
+        self.assertNotIn("v1.1-build.3", html)
+        self.assertIn("VoiceHelper 1.1 (4)", html)
 
 
 if __name__ == "__main__":

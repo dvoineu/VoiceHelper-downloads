@@ -1473,6 +1473,27 @@ kbd.keycap {
   color: var(--vh-cyan-bright);
 }
 
+.release-changes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.release-changes li {
+  padding: 1.5rem;
+  border: 1px solid var(--vh-border);
+  border-radius: var(--vh-radius-lg);
+  background: rgba(2, 6, 23, 0.94);
+}
+
+.release-changes h3 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+.release-changes p, .release-footnote { color: var(--vh-text-secondary); line-height: 1.65; }
+.release-changes p { margin: 0; }
+.release-notes-link { color: var(--vh-cyan-bright); }
+
 /* ==========================================================================
    14. Responsive Breakpoints & Reduced Motion Safety
    ========================================================================== */
@@ -1495,6 +1516,7 @@ kbd.keycap {
   }
 
   .engines-grid,
+  .release-changes,
   .recommender-filters {
     grid-template-columns: 1fr;
   }

@@ -69,10 +69,10 @@
         "name": "VoiceHelper",
         "operatingSystem": "macOS 13.0+",
         "applicationCategory": "UtilitiesApplication",
-        "softwareVersion": "1.1",
+        "softwareVersion": "1.1 (4)",
         "identifier": "dev.voicehelper.VoiceHelper",
         "url": "https://dvoineu.github.io/VoiceHelper-downloads/",
-        "downloadUrl": "https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.dmg",
+        "downloadUrl": "https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.dmg",
         "description": "Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.",
         "featureList": [
           "Global Option-Space dictation and Option-Shift-V paste shortcuts",
@@ -556,6 +556,30 @@
       </div>
     </section>
 
+    <section id="whats-new" class="section-container deferred-section scrolly-card" aria-labelledby="whats-new-title">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="newKicker">Latest release · 1.1 (4)</span>
+        <h2 id="whats-new-title" class="section-title" data-i18n="newTitle">What’s new in VoiceHelper</h2>
+        <p class="section-subtitle" data-i18n="newSubtitle">A guided path from first launch to your first inserted phrase.</p>
+      </div>
+      <ul class="release-changes">
+        <li>
+          <h3 data-i18n="newSetupTitle">Setup that resumes</h3>
+          <p data-i18n="newSetupBody">Allow microphone and Accessibility access, choose recognition, then try dictation. Close the window and continue later, or skip setup and reopen it from the menu.</p>
+        </li>
+        <li>
+          <h3 data-i18n="newTrialTitle">Try before dictating in other apps</h3>
+          <p data-i18n="newTrialBody">Check your shortcut and dictate into a field inside the setup window. Setup confirms the inserted phrase without sending Return or changing your insertion settings.</p>
+        </li>
+        <li>
+          <h3 data-i18n="newModelTitle">See what a model needs</h3>
+          <p data-i18n="newModelBody">See model sizes and free disk space before downloading. Start a trial while your selected model downloads; recognition waits until it is ready.</p>
+        </li>
+      </ul>
+      <p class="release-footnote" data-i18n="newPreserved">Updating keeps your settings, API keys and downloaded models. Setup appears until you finish or skip it.</p>
+      <a class="release-notes-link" href="https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.4" data-i18n="newFullNotes">Read the full changelog and release notes →</a>
+    </section>
+
     <!-- ====================================================================
          6. DIRECT DOWNLOAD & INSTALLATION
          ==================================================================== -->
@@ -564,39 +588,39 @@
         <div>
           <span class="section-kicker" data-i18n="dlKicker">Apple Silicon · macOS 13 Ventura or later</span>
           <h2 class="section-title" style="margin-top:0.3rem;" data-i18n="dlTitle">Install VoiceHelper on your Mac</h2>
-          <p style="color:var(--vh-text-secondary);font-size:1.02rem;margin-bottom:1.5rem;" data-i18n="dlDesc">VoiceHelper 1.1 (build 3) for Macs with Apple Silicon (M1 or later). The app is Developer ID signed and Apple notarized. Choose the DMG installer or ZIP archive.</p>
+          <p style="color:var(--vh-text-secondary);font-size:1.02rem;margin-bottom:1.5rem;" data-i18n="dlDesc">VoiceHelper 1.1 (build 4) for Macs with Apple Silicon (M1 or later). The app is Developer ID signed and Apple notarized. Choose the DMG installer or ZIP archive.</p>
 
           <div class="hero-cta-group" style="margin-bottom:1.5rem;">
             <a
-              href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.dmg"
+              href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.dmg"
               class="btn-primary"
               data-i18n="dlBtnDmg"
             >Download VoiceHelper 1.1 (DMG)</a>
 
             <a
-              href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.zip"
+              href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.zip"
               class="btn-secondary"
               data-i18n="dlBtnZip"
             >Download App Archive (ZIP)</a>
           </div>
 
           <p style="font-size:0.85rem;display:flex;flex-wrap:wrap;gap:1rem;">
-            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/INSTALL.txt" data-i18n="dlInstall">Installation instructions</a>
-            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/SHA256SUMS" data-i18n="dlChecksums">SHA-256 checksums</a>
+            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/INSTALL.txt" data-i18n="dlInstall">Installation instructions</a>
+            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/SHA256SUMS" data-i18n="dlChecksums">SHA-256 checksums</a>
             <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases" data-i18n="dlVersions">All releases</a>
           </p>
         </div>
 
         <div style="background:rgba(2,6,23,0.72);border:1px solid var(--vh-border);border-radius:var(--vh-radius-lg);padding:1.5rem;">
-          <h3 style="margin:0 0 1rem;font-size:1.08rem;" data-i18n="dlChecklistTitle">4 Steps on First Launch (INSTALL.txt):</h3>
+          <h3 style="margin:0 0 1rem;font-size:1.08rem;" data-i18n="dlChecklistTitle">Start with guided setup:</h3>
           <ol style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.85rem;font-size:0.9rem;color:var(--vh-text-secondary);">
             <li data-i18n="dlStep1">1. Drag VoiceHelper.app to Applications and open it.</li>
-            <li data-i18n="dlStep2">2. In Settings → General, allow Microphone and Accessibility permissions.</li>
-            <li data-i18n="dlStep3">3. In Settings → Recognition, download the recommended local model (e.g., Small or Large v3 Turbo).</li>
-            <li data-i18n="dlStep4">4. Focus any text field, press ⌥Space, and speak!</li>
+            <li data-i18n="dlStep2">2. Follow setup to allow Microphone and Accessibility access.</li>
+            <li data-i18n="dlStep3">3. Choose recognition and download a local model, or check your optional cloud API key.</li>
+            <li data-i18n="dlStep4">4. Try a phrase in the setup field with your displayed shortcut, then dictate in other apps.</li>
           </ol>
           <div style="margin-top:1.25rem;padding-top:0.9rem;border-top:1px solid var(--vh-border);font-family:var(--vh-font-mono);font-size:0.75rem;color:var(--vh-text-muted);">
-            VoiceHelper 1.1 (3) · Apple Silicon (arm64) · macOS 13+
+            VoiceHelper 1.1 (4) · Apple Silicon (arm64) · macOS 13+
           </div>
         </div>
       </div>
