@@ -1465,6 +1465,12 @@ kbd.keycap {
 /* ==========================================================================
    14. Responsive Breakpoints & Reduced Motion Safety
    ========================================================================== */
+@media (max-width: 1360px) {
+  .primary-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 1024px) {
   .hero-section,
   .workbench-body,
@@ -1492,12 +1498,20 @@ kbd.keycap {
     grid-column: span 12;
   }
 
-  .primary-nav {
-    display: none;
-  }
 }
 
 @media (max-width: 640px) {
+  .menubar-shell {
+    flex-wrap: wrap;
+    border-radius: 1.25rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
   .hero-telemetry-grid,
   .model-catalog-grid {
     grid-template-columns: 1fr;
