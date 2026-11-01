@@ -1,0 +1,27 @@
+{
+  "name": "VoiceHelper — Голосовой ввод у текстового курсора для macOS",
+  "short_name": "VoiceHelper",
+  "description": "Бесплатная локальная диктовка для macOS прямо у текстового курсора на базе whisper.cpp (Metal) с поддержкой Deepgram и OpenAI / Groq.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#05070F",
+  "theme_color": "#1F94FA",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
