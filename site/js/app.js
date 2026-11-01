@@ -270,7 +270,7 @@ class VoiceHelperApp {
     this.currentPhraseIndex = 0;
     this.isDictating = false;
     this.simulateFocusTamper = false;
-    this.lastDictatedText = WORKBENCH_TARGETS.terminal.phrases.ru[0].spoken;
+    this.lastDictatedText = WORKBENCH_TARGETS.terminal.phrases[this.lang][0].spoken;
     this.storageMode = 'off';
 
     // Audio state
@@ -289,7 +289,13 @@ class VoiceHelperApp {
     const params = new URLSearchParams(window.location.search);
     const qLang = params.get('lang');
     if (qLang === 'en' || qLang === 'ru') return qLang;
-    return 'ru';
+    try {
+      const saved = localStorage.getItem('voicehelper-language');
+      if (saved === 'en' || saved === 'ru') return saved;
+    } catch (_) {
+      // Language selection also works when browser storage is unavailable.
+    }
+    return 'en';
   }
 
   init() {
@@ -348,13 +354,17 @@ class VoiceHelperApp {
   }
 
   bindNavigationAndLang() {
-    const langBtn = document.getElementById('lang-switch-btn');
-    if (langBtn) {
-      langBtn.addEventListener('click', () => {
-        const next = this.lang === 'ru' ? 'en' : 'ru';
-        this.applyLanguage(next);
+    document.querySelectorAll('[data-language]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        const language = link.dataset.language;
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', language);
+        history.replaceState(null, '', url);
+        this.applyLanguage(language);
       });
-    }
+    });
 
     const micBtn = document.getElementById('live-mic-btn');
     if (micBtn) {
@@ -952,6 +962,11 @@ class VoiceHelperApp {
   applyLanguage(lang) {
     this.lang = lang === 'en' ? 'en' : 'ru';
     const dict = I18N[this.lang];
+    try {
+      localStorage.setItem('voicehelper-language', this.lang);
+    } catch (_) {
+      // Keep the current selection and shareable URL without persistent storage.
+    }
 
     document.documentElement.lang = this.lang;
     document.title = dict.metaTitle;
@@ -966,10 +981,17 @@ class VoiceHelperApp {
       }
     });
 
-    const langBtnLabel = document.getElementById('lang-switch-label');
-    if (langBtnLabel) {
-      langBtnLabel.textContent = this.lang === 'ru' ? 'EN · English' : 'RU · Русский';
-    }
+    document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+      const key = el.dataset.i18nAriaLabel;
+      if (dict[key]) el.setAttribute('aria-label', dict[key]);
+    });
+    document.querySelectorAll('[data-language]').forEach((link) => {
+      if (link.dataset.language === this.lang) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', link.dataset.language);
+      link.href = url.pathname + url.search + url.hash;
+    });
 
     this.syncFormationUI(this.scene3d?.activeFormation || 0);
     this.renderWorkbench();

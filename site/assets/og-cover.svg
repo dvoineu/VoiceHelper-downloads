@@ -45,16 +45,16 @@
   <text x="132" y="122" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="16" font-weight="600" letter-spacing="0.5">macOS 13+ · Local Whisper.cpp · Metal GPU</text>
   <!-- Headline -->
   <text x="90" y="218" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="68" font-weight="800" letter-spacing="-1.5">VoiceHelper</text>
-  <text x="90" y="286" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="34" font-weight="600">Голосовой ввод прямо у текстового курсора</text>
+  <text x="90" y="286" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="34" font-weight="600">Voice dictation at your text cursor</text>
   <rect x="795" y="256" width="5" height="36" rx="2.5" fill="url(#caret-grad)" />
-  <text x="90" y="346" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="400">Нажмите ⌥Space → говорите → текст мгновенно в Terminal, IDE, браузере и чатах</text>
+  <text x="90" y="346" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="400">Press ⌥Space → speak → type in terminals, editors, browsers and chats</text>
   <!-- Keycaps / Specs -->
   <g transform="translate(90, 428)">
     <rect x="0" y="0" width="150" height="54" rx="12" fill="#111827" stroke="#334155" stroke-width="1.5" />
     <text x="24" y="34" fill="#38BDF8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="700">⌥ Space</text>
     <rect x="168" y="0" width="214" height="54" rx="12" fill="#111827" stroke="#334155" stroke-width="1.5" />
-    <text x="190" y="34" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="19" font-weight="600">Офлайн и бесплатно</text>
+    <text x="190" y="34" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="19" font-weight="600">Free and offline</text>
     <rect x="400" y="0" width="236" height="54" rx="12" fill="#111827" stroke="#334155" stroke-width="1.5" />
-    <text x="422" y="34" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="19" font-weight="600">Без перехвата фокуса</text>
+    <text x="422" y="34" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="19" font-weight="600">Keep your focus</text>
   </g>
 </svg>

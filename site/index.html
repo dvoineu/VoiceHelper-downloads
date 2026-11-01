@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VoiceHelper для macOS — Голосовой ввод прямо у текстового курсора (Офлайн Whisper.cpp и Metal)</title>
-  <meta name="description" content="Бесплатное приложение диктовки для macOS 13+. Нажмите ⌥Space, говорите — и текст появится в Terminal, VS Code, браузере или мессенджере без потери фокуса. Локальный Whisper на Apple Silicon (Metal), Deepgram Streaming и OpenAI / Groq.">
-  <meta name="keywords" content="VoiceHelper, голосовой ввод macOS, диктовка для Mac, локальный Whisper macOS, whisper.cpp Metal, аналог Superwhisper, голосовой ввод в терминал, speech to text macOS offline, Deepgram macOS">
+  <title>VoiceHelper for macOS — Voice Dictation Right at Your Text Cursor (Offline Whisper.cpp &amp; Metal)</title>
+  <meta name="description" content="Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.">
+  <meta name="keywords" content="VoiceHelper, voice dictation macOS, offline speech to text, local Whisper, whisper.cpp Metal, voice typing for Mac">
   <meta name="author" content="Aliaksandr Dvoineu">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="theme-color" content="#05070F">
@@ -19,19 +19,19 @@
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="VoiceHelper">
-  <meta property="og:title" content="VoiceHelper для macOS — Голосовой ввод прямо у текстового курсора">
-  <meta property="og:description" content="Нажмите ⌥Space → говорите → текст мгновенно вставляется в активное поле без потери фокуса. Бесплатный локальный движок whisper.cpp на Metal, Deepgram и OpenAI / Groq.">
+  <meta property="og:title" content="VoiceHelper for macOS — Voice Dictation Right at Your Text Cursor (Offline Whisper.cpp &amp; Metal)">
+  <meta property="og:description" content="Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.">
   <meta property="og:url" content="https://dvoineu.github.io/VoiceHelper-downloads/">
   <meta property="og:image" content="https://dvoineu.github.io/VoiceHelper-downloads/assets/og-cover.svg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="ru_RU">
-  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="VoiceHelper для macOS — Голосовой ввод у текстового курсора">
-  <meta name="twitter:description" content="Бесплатная локальная диктовка для macOS 13+ на базе whisper.cpp (Metal). Работает в Terminal, VS Code, браузерах и чатах без перехвата фокуса.">
+  <meta name="twitter:title" content="VoiceHelper for macOS — Voice Dictation Right at Your Text Cursor (Offline Whisper.cpp &amp; Metal)">
+  <meta name="twitter:description" content="Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.">
   <meta name="twitter:image" content="https://dvoineu.github.io/VoiceHelper-downloads/assets/og-cover.svg">
 
   <!-- Icons & Web App Manifest -->
@@ -57,8 +57,11 @@
         "@id": "https://dvoineu.github.io/VoiceHelper-downloads/#website",
         "url": "https://dvoineu.github.io/VoiceHelper-downloads/",
         "name": "VoiceHelper",
-        "description": "Голосовой ввод для macOS в том месте, где стоит текстовый курсор.",
-        "inLanguage": ["ru", "en"]
+        "description": "Voice dictation right at the text cursor on macOS.",
+        "inLanguage": [
+          "en",
+          "ru"
+        ]
       },
       {
         "@type": "SoftwareApplication",
@@ -70,16 +73,16 @@
         "identifier": "dev.voicehelper.VoiceHelper",
         "url": "https://dvoineu.github.io/VoiceHelper-downloads/",
         "downloadUrl": "https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.dmg",
-        "description": "Бесплатное приложение голосового ввода для macOS 13+, которое вставляет речь прямо у текстового курсора без перехвата фокуса. Включает локальное распознавание whisper.cpp на Apple Silicon (Metal), потоковый Deepgram и поддержку OpenAI / Groq.",
+        "description": "Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.",
         "featureList": [
-          "Глобальные хоткеи ⌥Space (Tap or hold) и ⌥⇧V (Paste Last Dictation)",
-          "Плавающий HUD-оверлей у текстового курсора без перехвата фокуса окна",
-          "Локальное офлайн-распознавание whisper.cpp на GPU Apple Silicon (Metal) и CPU",
-          "Потоковое распознавание Deepgram WebSocket и облачный API OpenAI / Groq с ключом в macOS Keychain",
-          "Голосовые команды («новая строка», «новый абзац», «отправь») и автостоп после паузы",
-          "Проверка адресата вставки (Terminal, VS Code / Electron, браузеры) и авто-восстановление буфера обмена",
-          "Режим без записи на диск по умолчанию (Off — memory only) и опциональное шифрование истории AES-GCM",
-          "Детектор тихой речи Silero VAD 6.2.0 и 14 языков диктовки"
+          "Global Option-Space dictation and Option-Shift-V paste shortcuts",
+          "Non-activating dictation overlay near the text cursor",
+          "Offline whisper.cpp recognition with Apple Silicon Metal acceleration",
+          "Optional Deepgram streaming and OpenAI / Groq with your own API key",
+          "Voice commands and automatic stop after a pause",
+          "Target verification and clipboard restoration after confirmed insertion",
+          "Memory-only audio by default and optional AES-GCM encrypted history",
+          "Silero VAD 6.2.0 and 14 dictation languages"
         ],
         "offers": {
           "@type": "Offer",
@@ -94,34 +97,42 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Чем VoiceHelper отличается от стандартной диктовки macOS и Apple Intelligence?",
+            "name": "How is VoiceHelper different from built-in macOS Dictation and Apple Intelligence?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "VoiceHelper использует открытый движок whisper.cpp на GPU (Metal) с моделями до Large v3 Turbo и поддержкой 14 языков, показывает некрадущий фокус HUD-оверлей прямо у текстового курсора, поддерживает голосовые команды («новая строка», «отправь»), стоп после паузы и позволяет переключиться на потоковый Deepgram или OpenAI / Groq."
+              "text": "VoiceHelper runs open whisper.cpp models on your GPU (Metal) up to Large v3 Turbo across 14 languages without Apple Intelligence regional restrictions, shows a non-focus-stealing HUD right at the text cursor, supports voice commands (\"new line\", \"send it\") and auto-stop after pause, and lets you switch to Deepgram streaming or OpenAI / Groq anytime."
             }
           },
           {
             "@type": "Question",
-            "name": "Нужна ли подписка, регистрация или ключ API для работы?",
+            "name": "Do I need a subscription, account, or API key?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Нет. Локальный режим «На этом Mac (Whisper)» работает полностью бесплатно и без интернета после загрузки модели в настройках. Облачные провайдеры (Deepgram, OpenAI, Groq) необязательны и подключаются по вашему собственному ключу API."
+              "text": "No. \"On this Mac (Whisper)\" works completely offline and free after downloading a model in Settings. Cloud engines (Deepgram, OpenAI, Groq) are optional and use your own API key."
             }
           },
           {
             "@type": "Question",
-            "name": "Зачем приложению разрешение «Универсальный доступ» (Accessibility)?",
+            "name": "Why does VoiceHelper ask for Accessibility permission?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "В macOS любое приложение из строки меню, которое автоматически вставляет текст в активное поле другого окна и определяет координаты текстовой каретки, использует системный интерфейс Accessibility. Без него диктовка также работает, а готовый текст можно копировать из истории."
+              "text": "On macOS, any menu bar utility that locates the active text caret and inserts text into another application window (Terminal, IDE, browser) relies on the macOS Accessibility API. Even if Accessibility is not granted, you can still dictate and copy text manually from History."
             }
           },
           {
             "@type": "Question",
-            "name": "Сохраняются ли мои голосовые записи на диск?",
+            "name": "What happens if I switch windows or click elsewhere while dictating?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "По умолчанию включён режим «Off — memory only»: звук обрабатывается только в оперативной памяти и удаляется сразу после распознавания. При явном включении истории на 24 часа или 7 дней файлы шифруются AES-GCM с ключом в macOS Keychain."
+              "text": "VoiceHelper records the target app, window, and AX text field when dictation starts. If focus moves or Secure Input (a password field) becomes active, automatic insertion stops immediately so text is never typed into the wrong window. Your full transcript remains ready to copy or paste."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my voice recordings saved to disk?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "By default, \"Save dictations → Off (memory only)\" is active: audio stays in RAM only during transcription and is discarded right after. If you opt into 24-hour or 7-day retention, files are encrypted with AES-GCM and the key stays exclusively in your macOS Keychain."
             }
           }
         ]
@@ -131,7 +142,7 @@
   </script>
 </head>
 <body>
-  <a href="#main-content" class="skip-link" data-i18n="skipToContent">Перейти к основному содержимому</a>
+  <a href="#main-content" class="skip-link" data-i18n="skipToContent">Skip to main content</a>
 
   <!-- Purely decorative scroll progress indicator (aria-hidden="true" per modern-web-guidance) -->
   <div id="scroll-progress" aria-hidden="true"></div>
@@ -146,10 +157,10 @@
   <!-- Top macOS Menu Bar Navigation -->
   <header class="site-header">
     <div class="menubar-shell">
-      <a href="#hero" class="brand-link" aria-label="VoiceHelper — На главную">
+      <a href="#hero" class="brand-link" aria-label="VoiceHelper — Home" data-i18n-aria-label="homeLabel">
         <img
           src="./assets/icon-192.png"
-          alt="Иконка приложения VoiceHelper"
+          alt="VoiceHelper app icon"
           class="brand-icon"
           width="32"
           height="32"
@@ -159,13 +170,13 @@
         <span class="brand-status-dot" aria-hidden="true"></span>
       </a>
 
-      <nav class="primary-nav" aria-label="Основная навигация">
+      <nav class="primary-nav" aria-label="Main navigation" data-i18n-aria-label="navigationLabel">
         <ul>
-          <li><a href="#workbench" data-i18n="navWorkbench">Симулятор у курсора</a></li>
-          <li><a href="#engines" data-i18n="navEngines">Движки</a></li>
-          <li><a href="#models" data-i18n="navModels">Подбор модели</a></li>
-          <li><a href="#privacy" data-i18n="navPrivacy">Надёжность и память</a></li>
-          <li><a href="#faq-section" data-i18n="navFaq">Вопросы</a></li>
+          <li><a href="#workbench" data-i18n="navWorkbench">Cursor Simulator</a></li>
+          <li><a href="#engines" data-i18n="navEngines">Recognition Engines</a></li>
+          <li><a href="#models" data-i18n="navModels">Mac Model Picker</a></li>
+          <li><a href="#privacy" data-i18n="navPrivacy">Reliability &amp; Privacy</a></li>
+          <li><a href="#faq-section" data-i18n="navFaq">FAQ</a></li>
         </ul>
       </nav>
 
@@ -176,25 +187,21 @@
           class="audio-btn"
           aria-pressed="false"
           data-i18n="headerMicOff"
-        >Живой микрофон в 3D</button>
+        >Enable Live Mic in 3D</button>
 
-        <button
-          type="button"
-          id="lang-switch-btn"
-          class="lang-switch"
-          aria-label="Переключить язык сайта (Switch language)"
-        >
-          <span id="lang-switch-label">EN · English</span>
-        </button>
+        <div class="language-switch" role="group" aria-label="Website language" data-i18n-aria-label="languageLabel">
+          <a href="?lang=en" class="lang-switch" data-language="en" lang="en" hreflang="en" aria-current="true">English</a>
+          <a href="?lang=ru" class="lang-switch" data-language="ru" lang="ru" hreflang="ru">Русский</a>
+        </div>
 
-        <a href="#download" class="header-cta" data-i18n="headerDownloadCta">Скачать DMG</a>
+        <a href="#download" class="header-cta" data-i18n="headerDownloadCta">Download for macOS</a>
       </div>
     </div>
   </header>
 
   <!-- Floating 3D Stage Dock & Live HUD Capsule Replica -->
-  <aside class="stage-dock" aria-label="Управление 3D-сценой и индикатор диктовки">
-    <div class="stage-mode-pills" role="group" aria-label="Формации 3D-объекта">
+  <aside class="stage-dock" aria-label="3D scene controls and dictation status" data-i18n-aria-label="stageControlsLabel">
+    <div class="stage-mode-pills" role="group" aria-label="3D object formations" data-i18n-aria-label="formationControlsLabel">
       <button type="button" class="stage-pill" data-formation="0" aria-pressed="true">01 · Wave</button>
       <button type="button" class="stage-pill" data-formation="1" aria-pressed="false">02 · Caret</button>
       <button type="button" class="stage-pill" data-formation="2" aria-pressed="false">03 · Metal</button>
@@ -205,7 +212,7 @@
     <div class="floating-hud-capsule" id="floating-hud-capsule" data-state="idle">
       <div class="hud-wave-cluster" id="floating-hud-wave" aria-hidden="true"></div>
       <div class="hud-meta">
-        <div class="hud-status-line" id="floating-hud-title" data-i18n="wbHudIdle">Готов к записи · Нажмите ⌥Space у курсора</div>
+        <div class="hud-status-line" id="floating-hud-title" data-i18n="wbHudIdle">Ready to record · Press ⌥Space at cursor</div>
         <div class="hud-subline">NSPanel · Non-activating · Near cursor</div>
       </div>
       <button type="button" id="floating-hud-action" class="hud-Action-btn">⌥Space</button>
@@ -220,23 +227,21 @@
       <div class="hero-copy-col">
         <div class="hero-eyebrow">
           <span aria-hidden="true">●</span>
-          <span data-i18n="heroEyebrow">macOS 13+ · Бесплатная локальная диктовка · Apple Silicon (Metal) и CPU</span>
+          <span data-i18n="heroEyebrow">macOS 13+ · Free Local Dictation · Apple Silicon (Metal) &amp; CPU</span>
         </div>
 
         <h1 class="hero-title">
-          <span data-i18n="heroTitlePrefix">Говорите там, где мигает</span>
-          <span class="gradient-word" data-i18n="heroTitleHighlight">текстовый курсор</span><span class="live-caret-glyph" aria-hidden="true"></span>
+          <span data-i18n="heroTitlePrefix">Speak right where your</span>
+          <span class="gradient-word" data-i18n="heroTitleHighlight">text cursor blinks</span><span class="live-caret-glyph" aria-hidden="true"></span>
         </h1>
 
-        <p class="hero-lead" data-i18n="heroLead">
-          Нажмите ⌥Space в любом приложении macOS — от Terminal и VS Code до Telegram и браузера. VoiceHelper превращает речь в чистый текст прямо у каретки, не забирает фокус окна и работает офлайн на вашем Mac.
-        </p>
+        <p class="hero-lead" data-i18n="heroLead">Press ⌥Space in any macOS app — from Terminal and VS Code to Telegram and Safari. VoiceHelper turns speech into clean text right at the caret, never steals window focus, and runs offline on your Mac.</p>
 
         <div class="keycap-bar">
           <button type="button" id="hero-dictate-btn" class="tactile-keycap-btn">
             <kbd class="keycap">⌥</kbd>
             <kbd class="keycap">Space</kbd>
-            <span data-i18n="heroStartDictationBtn">Начать тестовую диктовку</span>
+            <span data-i18n="heroStartDictationBtn">Start Test Dictation</span>
           </button>
           <span style="font-size:0.84rem;color:var(--vh-text-muted);font-family:var(--vh-font-mono);">
             Tap or hold · <kbd class="keycap">⌥⇧V</kbd> Paste last · <kbd class="keycap">⇧</kbd> + Stop = Return ⏎
@@ -245,7 +250,7 @@
 
         <div class="hero-cta-group">
           <a href="#download" class="btn-primary">
-            <span data-i18n="heroDownloadPrimary">Скачать для macOS (DMG)</span>
+            <span data-i18n="heroDownloadPrimary">Download for macOS (DMG)</span>
             <span aria-hidden="true">↓</span>
           </a>
           <a
@@ -254,21 +259,21 @@
             rel="noopener noreferrer"
             class="btn-secondary"
             data-i18n="heroInspectSource"
-          >История версий</a>
+          >Release history</a>
         </div>
 
         <div class="hero-telemetry-grid">
           <div class="telemetry-tile">
-            <div class="telemetry-value" data-i18n="telemetryLatencyVal">0 ₽ / Офлайн</div>
-            <div class="telemetry-label" data-i18n="telemetryLatencyLabel">Локальный whisper.cpp на Metal без подписок и облака</div>
+            <div class="telemetry-value" data-i18n="telemetryLatencyVal">$0 / Offline Ready</div>
+            <div class="telemetry-label" data-i18n="telemetryLatencyLabel">Local whisper.cpp on Metal with no subscriptions or cloud lock-in</div>
           </div>
           <div class="telemetry-tile">
-            <div class="telemetry-value" data-i18n="telemetryFocusVal">0 перехватов фокуса</div>
-            <div class="telemetry-label" data-i18n="telemetryFocusLabel">NSPanel у каретки не активирует чужое окно и не следует за мышью</div>
+            <div class="telemetry-value" data-i18n="telemetryFocusVal">Zero Focus Stealing</div>
+            <div class="telemetry-label" data-i18n="telemetryFocusLabel">Non-activating HUD at the caret never pulls focus or chases the mouse</div>
           </div>
           <div class="telemetry-tile">
-            <div class="telemetry-value" data-i18n="telemetryPrivacyVal">RAM-only по умолчанию</div>
-            <div class="telemetry-label" data-i18n="telemetryPrivacyLabel">Аудио не пишется на диск без вашего явного включения</div>
+            <div class="telemetry-value" data-i18n="telemetryPrivacyVal">RAM-Only Default</div>
+            <div class="telemetry-label" data-i18n="telemetryPrivacyLabel">Audio never touches disk unless you explicitly enable encrypted history</div>
           </div>
         </div>
       </div>
@@ -276,8 +281,8 @@
       <!-- Right Column: 3D Stage Viewport Telemetry Frame -->
       <div class="observatory-hud-panel">
         <div class="observatory-top-bar">
-          <span class="coord-badge" data-i18n="obsBadgeTitle">3D АКУСТИЧЕСКОЕ ЯДРО · THREE.JS WEBGL</span>
-          <span id="obs-formation-label" class="coord-badge" data-i18n="obsFormationLabel">Формация: Резонанс волны</span>
+          <span class="coord-badge" data-i18n="obsBadgeTitle">3D ACOUSTIC CORE · THREE.JS WEBGL</span>
+          <span id="obs-formation-label" class="coord-badge" data-i18n="obsFormationLabel">Formation: Acoustic Resonance</span>
         </div>
 
         <div style="margin:auto 0;text-align:right;pointer-events:none;">
@@ -287,10 +292,10 @@
         </div>
 
         <div style="display:flex;flex-direction:column;gap:0.6rem;">
-          <div class="meter-24-strip" id="meter-24-strip" role="img" aria-label="24-сегментный индикатор уровня микрофона"></div>
+          <div class="meter-24-strip" id="meter-24-strip" role="img" aria-label="24-segment microphone level meter" data-i18n-aria-label="microphoneMeterLabel"></div>
           <div class="observatory-bottom-bar">
-            <span id="obs-mic-status" data-i18n="obsMicStatusIdle">Спектр: синтез речи (нажмите «Включить микрофон в 3D» для живого голоса)</span>
-            <span data-i18n="obsHintKey">Нажмите ⌥Space или кликните по 3D-клавишам в сцене</span>
+            <span id="obs-mic-status" data-i18n="obsMicStatusIdle">Spectrum: synthesized voice envelope (click "Enable Live Mic in 3D" for real voice)</span>
+            <span data-i18n="obsHintKey">Press ⌥Space or click the 3D keycaps in the scene</span>
           </div>
         </div>
       </div>
@@ -301,11 +306,9 @@
          ==================================================================== -->
     <section id="workbench" class="section-container scrolly-card">
       <div class="section-header">
-        <span class="section-kicker" data-i18n="wbKicker">Интерактивный стенд · Проверка адресата вставки</span>
-        <h2 class="section-title" data-i18n="wbTitle">Проверьте, как оверлей работает у курсора без потери фокуса</h2>
-        <p class="section-subtitle" data-i18n="wbSubtitle">
-          Выберите целевое приложение, нажмите ⌥Space (или кнопку ниже), произнесите или выберите тестовую фразу. Включите тумблер смены фокуса, чтобы увидеть, как VoiceHelper защищает чужие окна и буфер обмена.
-        </p>
+        <span class="section-kicker" data-i18n="wbKicker">Interactive Workbench · Target Verification</span>
+        <h2 class="section-title" data-i18n="wbTitle">Test how the cursor overlay works without stealing window focus</h2>
+        <p class="section-subtitle" data-i18n="wbSubtitle">Choose a target app, press ⌥Space (or click the button below), and test voice commands. Toggle focus-shift simulation to see how VoiceHelper protects unintended windows and your clipboard.</p>
       </div>
 
       <div class="workbench-shell">
@@ -319,7 +322,7 @@
             <strong id="wb-window-title" style="font-family:var(--vh-font-mono);font-size:0.86rem;">Terminal.app — zsh (VoiceHelper)</strong>
           </div>
 
-          <div class="app-target-tabs" role="tablist" aria-label="Целевое приложение для вставки">
+          <div class="app-target-tabs" role="tablist" aria-label="Target app for text insertion" data-i18n-aria-label="targetAppLabel">
             <button type="button" role="tab" class="target-tab-btn" data-target="terminal" aria-selected="true">Terminal.app</button>
             <button type="button" role="tab" class="target-tab-btn" data-target="vscode" aria-selected="false">VS Code / Qoder</button>
             <button type="button" role="tab" class="target-tab-btn" data-target="telegram" aria-selected="false">Telegram</button>
@@ -332,11 +335,11 @@
             <div>
               <div class="editor-meta-bar">
                 <span id="wb-ax-role">AXTextArea · TerminalWindow</span>
-                <span id="wb-ax-badge" class="ax-badge" data-i18n="wbAxVerified">AX-цель подтверждена · Каретка зафиксирована</span>
+                <span id="wb-ax-badge" class="ax-badge" data-i18n="wbAxVerified">AX Target Verified · Caret Locked</span>
               </div>
 
               <div class="editor-viewport" aria-live="polite">
-                <span id="wb-prompt-prefix" class="editor-prompt-prefix">dvoineu@macbook VoiceHelper % </span><span id="wb-inserted-text" class="inserted-span">git commit -m "feat: проверена вставка у курсора без потери фокуса" &amp;&amp; swift test</span><span class="live-caret-glyph" aria-hidden="true"></span>
+                <span id="wb-prompt-prefix" class="editor-prompt-prefix">dvoineu@macbook VoiceHelper % </span><span id="wb-inserted-text" class="inserted-span">git commit -m "feat: verify non-activating cursor insertion" &amp;&amp; swift test</span><span class="live-caret-glyph" aria-hidden="true"></span>
               </div>
             </div>
 
@@ -347,38 +350,30 @@
                 <circle class="pause-ring-fg" id="pause-ring-fg" cx="14" cy="14" r="11"></circle>
               </svg>
               <div style="flex:1;min-width:0;">
-                <div id="wb-inline-status" style="font-size:0.86rem;font-weight:600;color:var(--vh-text);" data-i18n="wbHudInserted">
-                  Вставлено · Буфер обмена автоматически восстановлен
-                </div>
+                <div id="wb-inline-status" style="font-size:0.86rem;font-weight:600;color:var(--vh-text);" data-i18n="wbHudInserted">Inserted · Previous clipboard restored automatically</div>
                 <div style="font-size:0.74rem;font-family:var(--vh-font-mono);color:var(--vh-text-muted);">
                   Anchor: Near cursor · Stop after pause: 2.0s · Voice commands: ON
                 </div>
               </div>
-              <button type="button" id="wb-copy-manual-btn" class="hud-Action-btn" hidden data-i18n="wbCopyManualBtn">Скопировать текст</button>
+              <button type="button" id="wb-copy-manual-btn" class="hud-Action-btn" hidden data-i18n="wbCopyManualBtn">Copy Text</button>
             </div>
           </div>
 
           <div class="workbench-controls-pane">
             <div>
-              <h3 class="control-group-title" data-i18n="wbSelectPhraseTitle">Сценарий диктовки и голосовые команды</h3>
+              <h3 class="control-group-title" data-i18n="wbSelectPhraseTitle">Dictation Scenario &amp; Voice Commands</h3>
               <div id="wb-phrase-list" class="phrase-preset-list"></div>
             </div>
 
             <label class="safety-toggle-row" for="safety-focus-toggle">
-              <span data-i18n="wbSafetyToggleLabel">Симулировать смену окна / поле пароля во время речи</span>
+              <span data-i18n="wbSafetyToggleLabel">Simulate window focus change / password field during speech</span>
               <input type="checkbox" id="safety-focus-toggle">
             </label>
 
             <div class="workbench-action-row">
-              <button type="button" id="wb-trigger-btn" class="wb-btn primary" data-i18n="wbTriggerBtnIdle">
-                Начать тестовую диктовку (⌥Space)
-              </button>
-              <button type="button" id="wb-send-shift-btn" class="wb-btn" data-i18n="wbSendShiftBtn">
-                Стоп с ⇧ → Вставить и отправить (⏎)
-              </button>
-              <button type="button" id="wb-paste-last-btn" class="wb-btn" data-i18n="wbPasteLastBtn">
-                Вставить последнюю (⌥⇧V)
-              </button>
+              <button type="button" id="wb-trigger-btn" class="wb-btn primary" data-i18n="wbTriggerBtnIdle">Start Test Dictation (⌥Space)</button>
+              <button type="button" id="wb-send-shift-btn" class="wb-btn" data-i18n="wbSendShiftBtn">Stop with ⇧ → Insert &amp; Send (⏎)</button>
+              <button type="button" id="wb-paste-last-btn" class="wb-btn" data-i18n="wbPasteLastBtn">Paste Last Dictation (⌥⇧V)</button>
             </div>
           </div>
         </div>
@@ -390,59 +385,51 @@
          ==================================================================== -->
     <section id="engines" class="section-container deferred-section scrolly-card">
       <div class="section-header">
-        <span class="section-kicker" data-i18n="engKicker">Три архитектуры распознавания · Переключение из строки меню</span>
-        <h2 class="section-title" data-i18n="engTitle">Локально без интернета или в облаке по вашему ключу</h2>
-        <p class="section-subtitle" data-i18n="engSubtitle">
-          Никаких навязанных подписок: локальный движок работает бесплатно прямо на Mac, а облачные провайдеры подключаются только по вашему собственному API-ключу из связки ключей macOS Keychain.
-        </p>
+        <span class="section-kicker" data-i18n="engKicker">Three Recognition Architectures · Switch from the Menu Bar</span>
+        <h2 class="section-title" data-i18n="engTitle">Offline on your Mac or in the cloud with your own API key</h2>
+        <p class="section-subtitle" data-i18n="engSubtitle">No forced subscriptions: local recognition is completely free on your Mac, while optional cloud providers connect directly with your own macOS Keychain API key.</p>
       </div>
 
       <div class="engines-grid">
         <article class="engine-card" data-selected="true">
           <div class="engine-badge-row">
-            <span class="engine-tag" data-i18n="eng1Tag">По умолчанию · Офлайн</span>
+            <span class="engine-tag" data-i18n="eng1Tag">Default · Offline</span>
             <span style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-emerald);">whisper.cpp · Metal</span>
           </div>
-          <h3 class="engine-title" data-i18n="eng1Title">На этом Mac (Whisper)</h3>
-          <p class="engine-desc" data-i18n="eng1Desc">
-            Локальные модели whisper.cpp (ggml) с ускорением на графическом процессоре Apple Silicon через Metal. Голос никогда не покидает ваш компьютер.
-          </p>
+          <h3 class="engine-title" data-i18n="eng1Title">On this Mac (Whisper)</h3>
+          <p class="engine-desc" data-i18n="eng1Desc">Local whisper.cpp (ggml) models accelerated on Apple Silicon GPU via Metal. Your voice never leaves this Mac.</p>
           <ul class="engine-specs">
-            <li><span data-i18n="eng1Spec1Label">Стоимость и сеть</span><strong data-i18n="eng1Spec1Val">Бесплатно · Без интернета</strong></li>
-            <li><span data-i18n="eng1Spec2Label">Детектор тихой речи</span><strong data-i18n="eng1Spec2Val">Silero VAD 6.2.0 на CPU</strong></li>
-            <li><span data-i18n="eng1Spec3Label">Контроль памяти</span><strong data-i18n="eng1Spec3Val">Выгрузка из RAM через 5 мин простоя</strong></li>
+            <li><span data-i18n="eng1Spec1Label">Cost &amp; Network</span><strong data-i18n="eng1Spec1Val">Free · Works Offline</strong></li>
+            <li><span data-i18n="eng1Spec2Label">Quiet Speech Detector</span><strong data-i18n="eng1Spec2Val">Silero VAD 6.2.0 on CPU</strong></li>
+            <li><span data-i18n="eng1Spec3Label">Memory Lifecycle</span><strong data-i18n="eng1Spec3Val">Unloads after 5 min idle or RAM pressure</strong></li>
           </ul>
         </article>
 
         <article class="engine-card" data-selected="false">
           <div class="engine-badge-row">
-            <span class="engine-tag" data-i18n="eng2Tag">Потоковый · Мгновенный</span>
+            <span class="engine-tag" data-i18n="eng2Tag">Streaming · Real-Time</span>
             <span style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-cyan-bright);">WebSocket Stream</span>
           </div>
           <h3 class="engine-title" data-i18n="eng2Title">Deepgram (Streaming)</h3>
-          <p class="engine-desc" data-i18n="eng2Desc">
-            Передача аудиочанков по WebSocket в реальном времени: промежуточный и финальный текст проявляется уже во время вашей фразы.
-          </p>
+          <p class="engine-desc" data-i18n="eng2Desc">Streams PCM chunks over WebSocket so live interim and final transcripts appear while you are still speaking.</p>
           <ul class="engine-specs">
-            <li><span data-i18n="eng2Spec1Label">Протокол</span><strong data-i18n="eng2Spec1Val">WebSocket /v1/listen</strong></li>
-            <li><span data-i18n="eng2Spec2Label">Контроль очереди</span><strong data-i18n="eng2Spec2Val">До 512 КБ / 128 чанков с защитой от зависаний</strong></li>
-            <li><span data-i18n="eng2Spec3Label">Хранение ключа</span><strong data-i18n="eng2Spec3Val">macOS Keychain + проверка в 1 клик</strong></li>
+            <li><span data-i18n="eng2Spec1Label">Protocol</span><strong data-i18n="eng2Spec1Val">WebSocket /v1/listen</strong></li>
+            <li><span data-i18n="eng2Spec2Label">Backpressure Budget</span><strong data-i18n="eng2Spec2Val">512 KiB / 128 chunks with stall protection</strong></li>
+            <li><span data-i18n="eng2Spec3Label">Key Storage</span><strong data-i18n="eng2Spec3Val">macOS Keychain + 1-click check</strong></li>
           </ul>
         </article>
 
         <article class="engine-card" data-selected="false">
           <div class="engine-badge-row">
-            <span class="engine-tag" data-i18n="eng3Tag">Облачный API · Гибкий</span>
+            <span class="engine-tag" data-i18n="eng3Tag">Cloud API · Flexible</span>
             <span style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-violet);">OpenAI / Groq / Custom</span>
           </div>
-          <h3 class="engine-title" data-i18n="eng3Title">OpenAI / Groq / Свой URL</h3>
-          <p class="engine-desc" data-i18n="eng3Desc">
-            Поддержка любого совместимого эндпоинта /audio/transcriptions. Потоковая сборка multipart WAV на лету без создания временных файлов на диске.
-          </p>
+          <h3 class="engine-title" data-i18n="eng3Title">OpenAI / Groq / Custom URL</h3>
+          <p class="engine-desc" data-i18n="eng3Desc">Works with any /audio/transcriptions endpoint. Streams multipart WAV on the fly without writing temporary audio files to disk.</p>
           <ul class="engine-specs">
-            <li><span data-i18n="eng3Spec1Label">Совместимость</span><strong data-i18n="eng3Spec1Val">OpenAI, Groq, локальный HTTPS/loopback сервер</strong></li>
-            <li><span data-i18n="eng3Spec2Label">Буфер отправки</span><strong data-i18n="eng3Spec2Val">Потоковый 64 КБ чанк без temp-файлов</strong></li>
-            <li><span data-i18n="eng3Spec3Label">При сетевом сбое</span><strong data-i18n="eng3Spec3Val">Без скрытых платных повторов · Recognize Again…</strong></li>
+            <li><span data-i18n="eng3Spec1Label">Compatibility</span><strong data-i18n="eng3Spec1Val">OpenAI, Groq, or local HTTPS/loopback server</strong></li>
+            <li><span data-i18n="eng3Spec2Label">Upload Pipeline</span><strong data-i18n="eng3Spec2Val">64 KiB streaming buffer, zero temp files</strong></li>
+            <li><span data-i18n="eng3Spec3Label">On Network Failure</span><strong data-i18n="eng3Spec3Val">No silent paid retries · Recognize Again…</strong></li>
           </ul>
         </article>
       </div>
@@ -453,17 +440,15 @@
          ==================================================================== -->
     <section id="models" class="section-container deferred-section scrolly-card">
       <div class="section-header">
-        <span class="section-kicker" data-i18n="modKicker">Интерактивный калькулятор · ModelRecommendation.swift</span>
-        <h2 class="section-title" data-i18n="modTitle">Узнайте, какую модель Whisper приложение выберет для вашего Mac</h2>
-        <p class="section-subtitle" data-i18n="modSubtitle">
-          VoiceHelper определяет процессор и объём объединённой памяти вашего Mac и подсвечивает оптимальную модель ggml с проверкой размера и контрольной суммы SHA-256.
-        </p>
+        <span class="section-kicker" data-i18n="modKicker">Interactive Calculator · ModelRecommendation.swift</span>
+        <h2 class="section-title" data-i18n="modTitle">See which Whisper model VoiceHelper recommends for your Mac</h2>
+        <p class="section-subtitle" data-i18n="modSubtitle">VoiceHelper inspects your Mac chip and unified memory to highlight the ideal ggml model, verified by exact byte size and SHA-256 checksum.</p>
       </div>
 
       <div class="recommender-panel">
         <div class="recommender-filters">
           <div class="filter-field">
-            <label for="rec-chip-select" data-i18n="modChipLabel">Процессор вашего Mac</label>
+            <label for="rec-chip-select" data-i18n="modChipLabel">Your Mac Processor</label>
             <select id="rec-chip-select" class="filter-select">
               <option value="m4">Apple M4 / M4 Pro / Max</option>
               <option value="m3" selected>Apple M3 / M3 Pro / Max</option>
@@ -474,21 +459,21 @@
           </div>
 
           <div class="filter-field">
-            <label for="rec-ram-select" data-i18n="modRamLabel">Объём оперативной памяти</label>
+            <label for="rec-ram-select" data-i18n="modRamLabel">Unified Memory (RAM)</label>
             <select id="rec-ram-select" class="filter-select">
-              <option value="8">8 ГБ</option>
-              <option value="16" selected>16 ГБ</option>
-              <option value="24">24 ГБ</option>
-              <option value="32">32 ГБ и более</option>
+              <option value="8" data-i18n="ram8">8 GB</option>
+              <option value="16" selected data-i18n="ram16">16 GB</option>
+              <option value="24" data-i18n="ram24">24 GB</option>
+              <option value="32" data-i18n="ram32">32 GB or more</option>
             </select>
           </div>
 
           <div class="filter-field">
-            <label for="rec-lang-select" data-i18n="modLangLabel">Основной язык диктовки</label>
+            <label for="rec-lang-select" data-i18n="modLangLabel">Primary Dictation Language</label>
             <select id="rec-lang-select" class="filter-select">
-              <option value="ru" selected>Русский (Russian)</option>
-              <option value="en">English (Английский)</option>
-              <option value="auto">Auto-detect (14 языков)</option>
+              <option value="ru" selected data-i18n="speechRussian">Russian</option>
+              <option value="en" data-i18n="speechEnglish">English</option>
+              <option value="auto" data-i18n="speechAuto">Auto-detect (14 languages)</option>
               <option value="uk">Українська (Ukrainian)</option>
               <option value="de">Deutsch (German)</option>
             </select>
@@ -497,13 +482,11 @@
 
         <div class="recommendation-verdict-banner" aria-live="polite">
           <div>
-            <div style="font-size:0.76rem;font-family:var(--vh-font-mono);color:var(--vh-cyan-bright);text-transform:uppercase;">
-              Recommended ggml model
-            </div>
+            <div style="font-size:0.76rem;font-family:var(--vh-font-mono);color:var(--vh-cyan-bright);text-transform:uppercase;" data-i18n="recommendedModelLabel">Recommended ggml model</div>
             <strong id="rec-verdict-model" style="font-size:1.35rem;">Large v3 Turbo (1620 MB)</strong>
           </div>
           <div id="rec-verdict-reason" style="font-size:0.95rem;color:var(--vh-text-secondary);max-width:60ch;">
-            Apple M3, 16 ГБ: достаточно объединённой памяти для самой точной модели с ускорением Metal.
+            Apple M3, 16 GB: enough unified memory for a larger model with Metal acceleration.
           </div>
         </div>
 
@@ -516,59 +499,43 @@
          ==================================================================== -->
     <section id="privacy" class="section-container deferred-section scrolly-card">
       <div class="section-header">
-        <span class="section-kicker" data-i18n="privKicker">Инженерная гигиена · Защита данных и ресурсов</span>
-        <h2 class="section-title" data-i18n="privTitle">Никаких фоновых утечек памяти, потерянных диктовок и перезаписанного буфера</h2>
-        <p class="section-subtitle" data-i18n="privSubtitle">
-          Каждая деталь спроектирована вокруг реальных граничных случаев macOS: от внезапного отключения Bluetooth-гарнитуры до работы в терминалах и Electron-редакторах.
-        </p>
+        <span class="section-kicker" data-i18n="privKicker">Engineering Hygiene · Data &amp; Resource Protection</span>
+        <h2 class="section-title" data-i18n="privTitle">No background memory leaks, lost dictations, or overwritten clipboards</h2>
+        <p class="section-subtitle" data-i18n="privSubtitle">Every subsystem is built for real macOS edge cases: from Bluetooth headset disconnects to Terminal and Electron/VS Code accessibility trees.</p>
       </div>
 
       <div class="architecture-bento">
         <article class="bento-card span-8">
-          <h3 data-i18n="privCard1Title">Режимы хранения диктовок и шифрование AES-GCM</h3>
-          <p data-i18n="privCard1Desc">Переключите режим ниже, чтобы увидеть, как VoiceHelper обращается с аудио и текстом на вашем Mac:</p>
+          <h3 data-i18n="privCard1Title">Dictation Storage Modes &amp; AES-GCM Encryption</h3>
+          <p data-i18n="privCard1Desc">Switch modes below to inspect how VoiceHelper handles audio and text on your Mac:</p>
 
-          <div class="storage-mode-tabs" role="tablist" aria-label="Режим сохранения диктовок">
-            <button type="button" role="tab" class="storage-tab" data-storage="off" aria-selected="true" data-i18n="storageTabOff">
-              Выкл — только в памяти (По умолчанию)
-            </button>
-            <button type="button" role="tab" class="storage-tab" data-storage="24h" aria-selected="false" data-i18n="storageTab24h">
-              24 часа (Аудио + Текст)
-            </button>
-            <button type="button" role="tab" class="storage-tab" data-storage="7d" aria-selected="false" data-i18n="storageTab7d">
-              7 дней текст + 24 ч аудио
-            </button>
+          <div class="storage-mode-tabs" role="tablist" aria-label="Dictation retention mode" data-i18n-aria-label="storageModeLabel">
+            <button type="button" role="tab" class="storage-tab" data-storage="off" aria-selected="true" data-i18n="storageTabOff">Off — Memory Only (Default)</button>
+            <button type="button" role="tab" class="storage-tab" data-storage="24h" aria-selected="false" data-i18n="storageTab24h">24 Hours (Audio + Text)</button>
+            <button type="button" role="tab" class="storage-tab" data-storage="7d" aria-selected="false" data-i18n="storageTab7d">7 Days Text + 24h Audio</button>
           </div>
 
           <div id="storage-readout" class="storage-readout" aria-live="polite"></div>
         </article>
 
         <article class="bento-card span-4">
-          <h3 data-i18n="privCard2Title">Защита адресата и авто-восстановление буфера обмена</h3>
-          <p data-i18n="privCard2Desc">
-            Перед вставкой проверяются приложение, окно, AX-элемент и позиция курсора. Для VS Code и Chromium-приложений дерево доступности активируется автоматически через AXManualAccessibility. После подтверждённой вставки предыдущее содержимое буфера обмена со всеми форматами возвращается на место.
-          </p>
+          <h3 data-i18n="privCard2Title">Target Verification &amp; Automatic Clipboard Restore</h3>
+          <p data-i18n="privCard2Desc">Before inserting text, VoiceHelper verifies the target app, window, AX element, and cursor selection. For VS Code and Chromium editors, accessibility trees are awakened via AXManualAccessibility. Once paste is confirmed, your previous clipboard items and formats are restored.</p>
           <div style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-cyan-bright);">
             Paste (⌘V) · Accessibility · Type as keystrokes
           </div>
         </article>
 
         <article class="bento-card span-6">
-          <h3 data-i18n="privCard3Title">Тихая речь (Silero VAD) и бережные бюджеты памяти</h3>
-          <p data-i18n="privCard3Desc">
-            Встроенный детектор Silero VAD 6.2.0 распознаёт даже тихую речь без сети. Если запись прервалась из-за сна Mac или смены микрофона, принятая часть сохраняется со статусом «Dictation interrupted» для повторного распознавания одной кнопкой.
-          </p>
-          <div style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-emerald);">
-            Лимит сессии: 10 мин (38,4 МБ PCM) · Выгрузка модели: 5 мин простоя
-          </div>
+          <h3 data-i18n="privCard3Title">Quiet Speech (Silero VAD) &amp; Strict Resource Budgets</h3>
+          <p data-i18n="privCard3Desc">Bundled Silero VAD 6.2.0 verifies quiet speech on CPU offline. If recording stops due to Mac sleep or mic disconnect, the captured audio is preserved as "Dictation interrupted" so you can run Recognize Again… with one click.</p>
+          <div style="font-family:var(--vh-font-mono);font-size:0.78rem;color:var(--vh-emerald);" data-i18n="sessionLimits">Session limit: 10 min (38.4 MB PCM) · Model unload: 5 min idle</div>
         </article>
 
         <article class="bento-card span-6">
-          <h3 data-i18n="privCard4Title">Автоопределение и 14 языков диктовки без ограничений</h3>
-          <p data-i18n="privCard4Desc">
-            Никаких языковых пейволлов: переключайте язык прямо из строки меню или используйте Auto-detect.
-          </p>
-          <div class="lang-cloud" aria-label="Поддерживаемые языки">
+          <h3 data-i18n="privCard4Title">Auto-Detect &amp; 14 Dictation Languages Without Paywalls</h3>
+          <p data-i18n="privCard4Desc">No language paywalls: switch languages straight from the menu bar or keep Auto-detect enabled.</p>
+          <div class="lang-cloud" aria-label="Supported languages" data-i18n-aria-label="supportedLanguagesLabel">
             <span class="lang-chip"><strong>AUTO</strong>Auto-detect</span>
             <span class="lang-chip"><strong>RU</strong>Русский</span>
             <span class="lang-chip"><strong>EN</strong>English</span>
@@ -595,40 +562,38 @@
     <section id="download" class="section-container deferred-section scrolly-card">
       <div class="download-box">
         <div>
-          <span class="section-kicker" data-i18n="dlKicker">Apple Silicon · macOS 13 Ventura и новее</span>
-          <h2 class="section-title" style="margin-top:0.3rem;" data-i18n="dlTitle">Установите VoiceHelper на свой Mac</h2>
-          <p style="color:var(--vh-text-secondary);font-size:1.02rem;margin-bottom:1.5rem;" data-i18n="dlDesc">
-            VoiceHelper 1.1 (сборка 3) для Mac с чипом Apple Silicon (M1 и новее). Приложение подписано Developer ID и прошло нотарификацию Apple. Выберите образ DMG или архив ZIP.
-          </p>
+          <span class="section-kicker" data-i18n="dlKicker">Apple Silicon · macOS 13 Ventura or later</span>
+          <h2 class="section-title" style="margin-top:0.3rem;" data-i18n="dlTitle">Install VoiceHelper on your Mac</h2>
+          <p style="color:var(--vh-text-secondary);font-size:1.02rem;margin-bottom:1.5rem;" data-i18n="dlDesc">VoiceHelper 1.1 (build 3) for Macs with Apple Silicon (M1 or later). The app is Developer ID signed and Apple notarized. Choose the DMG installer or ZIP archive.</p>
 
           <div class="hero-cta-group" style="margin-bottom:1.5rem;">
             <a
               href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.dmg"
               class="btn-primary"
               data-i18n="dlBtnDmg"
-            >Скачать образ VoiceHelper 1.1 (DMG)</a>
+            >Download VoiceHelper 1.1 (DMG)</a>
 
             <a
               href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/VoiceHelper-1.1-3-arm64.zip"
               class="btn-secondary"
               data-i18n="dlBtnZip"
-            >Скачать архив приложения (ZIP)</a>
+            >Download App Archive (ZIP)</a>
           </div>
 
           <p style="font-size:0.85rem;display:flex;flex-wrap:wrap;gap:1rem;">
-            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/INSTALL.txt" data-i18n="dlInstall">Инструкция установки</a>
-            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/SHA256SUMS" data-i18n="dlChecksums">Контрольные суммы SHA-256</a>
-            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases" data-i18n="dlVersions">Все версии</a>
+            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/INSTALL.txt" data-i18n="dlInstall">Installation instructions</a>
+            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.3/SHA256SUMS" data-i18n="dlChecksums">SHA-256 checksums</a>
+            <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases" data-i18n="dlVersions">All releases</a>
           </p>
         </div>
 
         <div style="background:rgba(2,6,23,0.72);border:1px solid var(--vh-border);border-radius:var(--vh-radius-lg);padding:1.5rem;">
-          <h3 style="margin:0 0 1rem;font-size:1.08rem;" data-i18n="dlChecklistTitle">4 шага при первом запуске (INSTALL.txt):</h3>
+          <h3 style="margin:0 0 1rem;font-size:1.08rem;" data-i18n="dlChecklistTitle">4 Steps on First Launch (INSTALL.txt):</h3>
           <ol style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.85rem;font-size:0.9rem;color:var(--vh-text-secondary);">
-            <li data-i18n="dlStep1">1. Перетащите VoiceHelper.app в папку «Программы» (Applications) и откройте его.</li>
-            <li data-i18n="dlStep2">2. В разделе General разрешите доступ к Микрофону (Microphone) и Универсальному доступу (Accessibility).</li>
-            <li data-i18n="dlStep3">3. В разделе Recognition скачайте рекомендованную локальную модель (например, Small или Large v3 Turbo).</li>
-            <li data-i18n="dlStep4">4. Установите курсор в любое текстовое поле, нажмите ⌥Space и говорите!</li>
+            <li data-i18n="dlStep1">1. Drag VoiceHelper.app to Applications and open it.</li>
+            <li data-i18n="dlStep2">2. In Settings → General, allow Microphone and Accessibility permissions.</li>
+            <li data-i18n="dlStep3">3. In Settings → Recognition, download the recommended local model (e.g., Small or Large v3 Turbo).</li>
+            <li data-i18n="dlStep4">4. Focus any text field, press ⌥Space, and speak!</li>
           </ol>
           <div style="margin-top:1.25rem;padding-top:0.9rem;border-top:1px solid var(--vh-border);font-family:var(--vh-font-mono);font-size:0.75rem;color:var(--vh-text-muted);">
             VoiceHelper 1.1 (3) · Apple Silicon (arm64) · macOS 13+
@@ -642,44 +607,34 @@
          ==================================================================== -->
     <section id="faq-section" class="section-container deferred-section scrolly-card">
       <div class="section-header">
-        <span class="section-kicker" data-i18n="faqKicker">Ответы на главные вопросы · Без маркетингового тумана</span>
-        <h2 class="section-title" data-i18n="faqTitle">Частые вопросы о VoiceHelper</h2>
+        <span class="section-kicker" data-i18n="faqKicker">Clear Answers · Zero Marketing Fog</span>
+        <h2 class="section-title" data-i18n="faqTitle">Frequently Asked Questions</h2>
       </div>
 
       <div class="faq-list">
         <details name="faq" class="faq-item" open>
-          <summary data-i18n="faqQ1">Чем VoiceHelper отличается от стандартной диктовки macOS и Apple Intelligence?</summary>
-          <p data-i18n="faqA1">
-            VoiceHelper использует открытый движок whisper.cpp на GPU (Metal) с моделями до Large v3 Turbo и полноценной поддержкой 14 языков (включая русский и украинский без ограничений Apple Intelligence), показывает некрадущий фокус HUD-оверлей прямо у текстового курсора, поддерживает голосовые команды («новая строка», «отправь»), стоп после паузы и позволяет в любой момент переключиться на потоковый Deepgram или OpenAI / Groq.
-          </p>
+          <summary data-i18n="faqQ1">How is VoiceHelper different from built-in macOS Dictation and Apple Intelligence?</summary>
+          <p data-i18n="faqA1">VoiceHelper runs open whisper.cpp models on your GPU (Metal) up to Large v3 Turbo across 14 languages without Apple Intelligence regional restrictions, shows a non-focus-stealing HUD right at the text cursor, supports voice commands ("new line", "send it") and auto-stop after pause, and lets you switch to Deepgram streaming or OpenAI / Groq anytime.</p>
         </details>
 
         <details name="faq" class="faq-item">
-          <summary data-i18n="faqQ2">Нужна ли подписка, регистрация или ключ API для работы?</summary>
-          <p data-i18n="faqA2">
-            Нет. Режим «На этом Mac (Whisper)» работает полностью бесплатно и без интернета сразу после загрузки выбранной модели в настройках. Облачные сервисы (Deepgram, OpenAI, Groq) необязательны и подключаются только по вашему желанию с вашим собственным ключом API.
-          </p>
+          <summary data-i18n="faqQ2">Do I need a subscription, account, or API key?</summary>
+          <p data-i18n="faqA2">No. "On this Mac (Whisper)" works completely offline and free after downloading a model in Settings. Cloud engines (Deepgram, OpenAI, Groq) are optional and use your own API key.</p>
         </details>
 
         <details name="faq" class="faq-item">
-          <summary data-i18n="faqQ3">Зачем приложению разрешение «Универсальный доступ» (Accessibility)?</summary>
-          <p data-i18n="faqA3">
-            В macOS любое приложение из строки меню, которое автоматически вставляет текст в активное поле другого окна (терминала, редактора, браузера) и определяет координаты текстовой каретки, использует системный интерфейс Accessibility. Если доступ ещё не выдан, вы всё равно можете диктовать и копировать готовый текст из окна истории.
-          </p>
+          <summary data-i18n="faqQ3">Why does VoiceHelper ask for Accessibility permission?</summary>
+          <p data-i18n="faqA3">On macOS, any menu bar utility that locates the active text caret and inserts text into another application window (Terminal, IDE, browser) relies on the macOS Accessibility API. Even if Accessibility is not granted, you can still dictate and copy text manually from History.</p>
         </details>
 
         <details name="faq" class="faq-item">
-          <summary data-i18n="faqQ4">Что происходит, если во время диктовки я случайно переключу окно или кликну в другое место?</summary>
-          <p data-i18n="faqA4">
-            VoiceHelper запоминает целевое приложение, окно и текстовое поле в момент старта диктовки. Если фокус сместился или активировалось защищённое поле ввода пароля (Secure Input), автоматическая вставка мгновенно блокируется, чтобы не отправить текст в случайный чат. Полный результат сохраняется в карточке у курсора и в разделе History с кнопками Paste и Copy.
-          </p>
+          <summary data-i18n="faqQ4">What happens if I switch windows or click elsewhere while dictating?</summary>
+          <p data-i18n="faqA4">VoiceHelper records the target app, window, and AX text field when dictation starts. If focus moves or Secure Input (a password field) becomes active, automatic insertion stops immediately so text is never typed into the wrong window. Your full transcript remains ready to copy or paste.</p>
         </details>
 
         <details name="faq" class="faq-item">
-          <summary data-i18n="faqQ5">Сохраняются ли мои голосовые записи на диск?</summary>
-          <p data-i18n="faqA5">
-            По умолчанию включён режим «Off — memory only»: звук обрабатывается исключительно в оперативной памяти и удаляется сразу после успешного распознавания. Если вы сами включите сохранение истории на 24 часа или 7 дней, файлы в папке Application Support шифруются алгоритмом AES-GCM, а ключ хранится только в связке ключей macOS Keychain вашего компьютера.
-          </p>
+          <summary data-i18n="faqQ5">Are my voice recordings saved to disk?</summary>
+          <p data-i18n="faqA5">By default, "Save dictations → Off (memory only)" is active: audio stays in RAM only during transcription and is discarded right after. If you opt into 24-hour or 7-day retention, files are encrypted with AES-GCM and the key stays exclusively in your macOS Keychain.</p>
         </details>
       </div>
     </section>
@@ -693,9 +648,9 @@
       </div>
 
       <div class="footer-links">
-        <a href="https://github.com/dvoineu/VoiceHelper-downloads" target="_blank" rel="noopener noreferrer" data-i18n="footerRepository">Репозиторий загрузок</a>
-        <a href="https://github.com/dvoineu/VoiceHelper-downloads/issues" target="_blank" rel="noopener noreferrer" data-i18n="footerIssues">Сообщить о проблеме</a>
-        <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases" target="_blank" rel="noopener noreferrer" data-i18n="dlVersions">Все версии</a>
+        <a href="https://github.com/dvoineu/VoiceHelper-downloads" target="_blank" rel="noopener noreferrer" data-i18n="footerRepository">Downloads repository</a>
+        <a href="https://github.com/dvoineu/VoiceHelper-downloads/issues" target="_blank" rel="noopener noreferrer" data-i18n="footerIssues">Report a problem</a>
+        <a href="https://github.com/dvoineu/VoiceHelper-downloads/releases" target="_blank" rel="noopener noreferrer" data-i18n="dlVersions">All releases</a>
         <a href="./sitemap.xml">Sitemap</a>
       </div>
     </div>

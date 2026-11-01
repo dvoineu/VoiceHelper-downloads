@@ -1,12 +1,12 @@
 {
-  "name": "VoiceHelper — Голосовой ввод у текстового курсора для macOS",
+  "name": "VoiceHelper — Voice dictation at your text cursor for macOS",
   "short_name": "VoiceHelper",
-  "description": "Бесплатная локальная диктовка для macOS прямо у текстового курсора на базе whisper.cpp (Metal) с поддержкой Deepgram и OpenAI / Groq.",
+  "description": "Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#05070F",
   "theme_color": "#1F94FA",
-  "lang": "ru",
+  "lang": "en",
   "icons": [
     {
       "src": "./assets/favicon.svg",

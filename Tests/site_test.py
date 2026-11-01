@@ -203,6 +203,23 @@ class VoiceHelperSiteTests(unittest.TestCase):
             relative = urlparse(resolved).path.removeprefix(urlparse(PUBLIC_SITE).path)
             self.assertTrue((SITE_DIR / relative).is_file(), relative)
 
+    def test_english_html_fallback_and_language_links(self):
+        html = (SITE_DIR / "index.html").read_text()
+        self.assertIn('<html lang="en">', html)
+        self.assertIn('>Install VoiceHelper on your Mac</h2>', html)
+        inspector = SemanticHTMLInspector()
+        inspector.feed(html)
+        languages = {a["data-language"]: a for a in inspector.anchors if "data-language" in a}
+        self.assertEqual(set(languages), {"en", "ru"})
+        for language, link in languages.items():
+            self.assertEqual(link["href"], "?lang=" + language)
+            self.assertEqual(link["lang"], language)
+        self.assertEqual(languages["en"]["aria-current"], "true")
+        self.assertNotIn("aria-current", languages["ru"])
+        self.assertEqual(json.loads((SITE_DIR / "site.webmanifest").read_text())["lang"], "en")
+        website = json.loads(inspector.json_ld_blocks[0])["@graph"][0]
+        self.assertEqual(website["inLanguage"], ["en", "ru"])
+
 
 if __name__ == "__main__":
     unittest.main()

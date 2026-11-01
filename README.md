@@ -6,6 +6,19 @@ Free local voice dictation at the text cursor. Local recognition works offline
 once a model has been downloaded. Optional cloud providers use your own API key
 and may charge separately.
 
+## Languages
+
+The website opens in English on your first visit. Use **English / Русский** in
+the header to change language. Your choice is remembered when local browser
+storage is available; an explicit language link always takes priority.
+
+[English website](https://dvoineu.github.io/VoiceHelper-downloads/?lang=en) ·
+[Сайт на русском](https://dvoineu.github.io/VoiceHelper-downloads/?lang=ru)
+
+Release notes include full English and Russian sections. Their reviewed source
+is kept in [docs/releases/](docs/releases/). The same app installer includes
+both interface languages.
+
 ## Download and install
 
 VoiceHelper 1.1 (build 3) requires **macOS 13+ and Apple Silicon (M1 or later)**.
