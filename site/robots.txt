@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dvoineu.github.io/VoiceHelper-downloads/sitemap.xml
