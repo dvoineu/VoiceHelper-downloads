@@ -187,6 +187,14 @@ class VoiceHelperSiteTests(unittest.TestCase):
             self.assertFalse(urlparse(resource).netloc, resource)
         self.assertEqual(sorted(p.name for p in (SITE_DIR / "vendor").iterdir()), ["LICENSE.txt", "three.module.min.js"])
 
+    def test_download_links_follow_latest_release(self):
+        html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
+        for kind in ["dmg", "zip", "install", "checksums", "label"]:
+            self.assertIn(f'data-release="{kind}"', html)
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("api.github.com/repos/${REPO}/releases/latest", app_js)
+        self.assertIn("const REPO = 'dvoineu/VoiceHelper-downloads';", app_js)
+
     def test_hero_scene_is_optional_and_respects_motion_settings(self):
         app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
         self.assertIn("import('./scene3d.js')", app_js)
@@ -217,7 +225,8 @@ class VoiceHelperSiteTests(unittest.TestCase):
         collector = I18nTextCollector()
         collector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
         for key, texts in collector.texts.items():
-            expected = " ".join(dictionary[key].replace("&amp;", "&").split())
+            value = dictionary[key].replace("{version}", "1.1").replace("{build}", "4")
+            expected = " ".join(value.replace("&amp;", "&").split())
             for text in texts:
                 self.assertEqual(text, expected, key)
 
@@ -319,7 +328,7 @@ class VoiceHelperSiteTests(unittest.TestCase):
             self.assertEqual(len(re.findall(r'\b' + key + r':\s*[\'\"][^\'\"]+', dictionary)), 2, key)
         self.assertIn(PUBLIC_REPO + "/releases/tag/v1.1-build.4", html)
         self.assertNotIn("v1.1-build.3", html)
-        self.assertIn("VoiceHelper 1.1 (4)", html)
+        self.assertIn('VoiceHelper <span data-release="label">1.1 (4)</span>', html)
 
 
 if __name__ == "__main__":

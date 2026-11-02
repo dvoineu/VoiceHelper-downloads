@@ -31,6 +31,82 @@ function detectInitialLanguage() {
 
 let currentLanguage = 'en';
 
+/* ---------- Latest release ----------
+ * The HTML links point at a known release, so downloads work without
+ * JavaScript. On load the page asks GitHub for the latest published
+ * release and, if it finds a DMG, points every download link at it and
+ * updates the version shown. Results are cached for an hour.
+ */
+
+const REPO = 'dvoineu/VoiceHelper-downloads';
+const RELEASE_CACHE_KEY = 'voicehelper-latest-release';
+const release = { version: '1.1', build: '4' };
+
+function fill(value) {
+  return value.replaceAll('{version}', release.version).replaceAll('{build}', release.build);
+}
+
+function parseRelease(data) {
+  const assets = data.assets || [];
+  const find = (test) => assets.find((a) => test(a.name))?.browser_download_url;
+  const dmg = find((n) => /\.dmg$/i.test(n));
+  if (!dmg) return null;
+  const match = /(\d+(?:\.\d+)*)[-_. ]*(?:build[-_. ]*|\()?(\d+)\)?/i.exec(data.tag_name || '')
+    || /VoiceHelper-(\d+(?:\.\d+)*)-(\d+)/i.exec(dmg);
+  return {
+    version: match ? match[1] : null,
+    build: match ? match[2] : null,
+    links: {
+      dmg,
+      zip: find((n) => /\.zip$/i.test(n)),
+      install: find((n) => /^INSTALL/i.test(n)),
+      checksums: find((n) => /^SHA256SUMS/i.test(n)),
+    },
+  };
+}
+
+function applyRelease(info) {
+  if (!info) return;
+  if (info.version && info.build) {
+    release.version = info.version;
+    release.build = info.build;
+  }
+  Object.entries(info.links).forEach(([kind, url]) => {
+    if (!url) return;
+    document.querySelectorAll(`[data-release="${kind}"]`).forEach((a) => { a.href = url; });
+  });
+  document.querySelectorAll('[data-release="label"]').forEach((el) => {
+    el.textContent = `${release.version} (${release.build})`;
+  });
+  applyLanguage(currentLanguage);
+}
+
+async function loadLatestRelease() {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(RELEASE_CACHE_KEY) || 'null');
+    if (cached && Date.now() - cached.at < 3600 * 1000) {
+      applyRelease(cached.info);
+      return;
+    }
+  } catch { /* no storage */ }
+  try {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 5000);
+    const response = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+      headers: { Accept: 'application/vnd.github+json' },
+      signal: controller.signal,
+    });
+    window.clearTimeout(timer);
+    if (!response.ok) return;
+    const info = parseRelease(await response.json());
+    if (!info) return;
+    try { sessionStorage.setItem(RELEASE_CACHE_KEY, JSON.stringify({ at: Date.now(), info })); } catch { /* no storage */ }
+    applyRelease(info);
+  } catch {
+    /* offline or rate limited: keep the links from the HTML */
+  }
+}
+
 function applyLanguage(lang) {
   currentLanguage = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const dict = I18N[currentLanguage];
@@ -42,12 +118,12 @@ function applyLanguage(lang) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const value = dict[el.dataset.i18n];
     if (value === undefined) return;
-    el.textContent = value;
+    el.textContent = fill(value);
     el.hidden = value === '';
   });
   document.querySelectorAll('[data-i18n-html]').forEach((el) => {
     const value = dict[el.dataset.i18nHtml];
-    if (value !== undefined) el.innerHTML = value;
+    if (value !== undefined) el.innerHTML = fill(value);
   });
   document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
     const value = dict[el.dataset.i18nAriaLabel];
@@ -216,3 +292,4 @@ setupLanguageSwitch();
 setupChapters();
 setupActiveNav();
 applyLanguage(detectInitialLanguage());
+loadLatestRelease();

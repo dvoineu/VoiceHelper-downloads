@@ -64,8 +64,16 @@ Actions checks each PR and publishes only `site/` after a merge to main. Manual
 publishing also runs checks and is allowed only on main. Application installers
 are attached to Releases and are never stored in the Git history or Pages artifact.
 
+The website's download buttons follow the latest published release on their own:
+on load the page asks the GitHub API for `releases/latest` and points the DMG, ZIP,
+INSTALL.txt and SHA256SUMS links at its assets, and shows its version. A release
+is picked up when it is published (not draft, not pre-release) with a `.dmg` asset
+and a tag like `v1.2-build.5`. Without JavaScript, or if the API is unreachable,
+the links written in `index.html` are used.
+
 When releasing another version, upload verified versioned assets and checksums
-first, then update the website's download links, visible version and metadata,
+first and publish the release: the buttons switch to it. Then, in one PR, update the
+fallback download links, visible version and metadata, the “What’s new” section,
 these README links, and the release constants in Tests/site_test.py together.
 Do not overwrite a published installer with different bytes under the same URL.
 

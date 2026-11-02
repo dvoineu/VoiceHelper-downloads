@@ -5,6 +5,7 @@
  * Keys used with data-i18n are plain text. Keys used with data-i18n-html may
  * contain <kbd>, <strong> and <em> only. Interface names match the app's
  * English and Russian localizations (Settings sections, buttons, badges).
+ * {version} and {build} are filled from the latest GitHub release (see app.js).
  * An empty string hides the element (used for notes that only one language needs).
  */
 export const I18N = {
@@ -29,7 +30,7 @@ export const I18N = {
     heroLead: 'VoiceHelper is voice typing for your Mac. Press <kbd>⌥ Option</kbd> + <kbd>Space</kbd> in any app, speak normally, and the text is inserted where you were typing. Recognition runs on your Mac: free, private and offline.',
     heroDownloadPrimary: 'Download for Mac',
     heroWatchGuide: 'Watch the 3-minute guide',
-    heroMeta: 'Version 1.1 (4) · signed and notarized by Apple · English and Russian interface',
+    heroMeta: 'Version {version} ({build}) · signed and notarized by Apple · English and Russian interface',
 
     demoLabel: 'Example: dictating a message with VoiceHelper',
     demoWindowTitle: 'Messages — Anna',
@@ -143,8 +144,8 @@ export const I18N = {
 
     dlKicker: 'Apple Silicon · macOS 13 Ventura or later',
     dlTitle: 'Install VoiceHelper on your Mac',
-    dlDesc: 'VoiceHelper 1.1 (build 4) for Macs with Apple Silicon (M1 or later). The app is Developer ID signed and Apple notarized. Choose the DMG installer or ZIP archive.',
-    dlBtnDmg: 'Download VoiceHelper 1.1 (DMG)',
+    dlDesc: 'VoiceHelper {version} (build {build}) for Macs with Apple Silicon (M1 or later). The app is Developer ID signed and Apple notarized. Choose the DMG installer or ZIP archive.',
+    dlBtnDmg: 'Download VoiceHelper {version} (DMG)',
     dlBtnZip: 'Download App Archive (ZIP)',
     dlInstall: 'Installation instructions',
     dlChecksums: 'SHA-256 checksums',
@@ -201,7 +202,7 @@ export const I18N = {
     heroLead: 'VoiceHelper — голосовой ввод для Mac. Нажмите <kbd>⌥ Option</kbd> + <kbd>Пробел</kbd> в любом приложении, говорите обычным голосом, и текст вставится туда, где вы печатали. Распознавание работает на вашем Mac: бесплатно, приватно и без интернета.',
     heroDownloadPrimary: 'Скачать для Mac',
     heroWatchGuide: 'Смотреть инструкцию (3 мин)',
-    heroMeta: 'Версия 1.1 (4) · подписано и проверено Apple · интерфейс на русском и английском',
+    heroMeta: 'Версия {version} ({build}) · подписано и проверено Apple · интерфейс на русском и английском',
 
     demoLabel: 'Пример: диктовка сообщения с VoiceHelper',
     demoWindowTitle: 'Сообщения — Анна',
@@ -315,8 +316,8 @@ export const I18N = {
 
     dlKicker: 'Apple Silicon · macOS 13 Ventura и новее',
     dlTitle: 'Установите VoiceHelper на свой Mac',
-    dlDesc: 'VoiceHelper 1.1 (сборка 4) для Mac с чипом Apple Silicon (M1 и новее). Приложение подписано Developer ID и прошло нотаризацию Apple. Выберите образ DMG или архив ZIP.',
-    dlBtnDmg: 'Скачать VoiceHelper 1.1 (DMG)',
+    dlDesc: 'VoiceHelper {version} (сборка {build}) для Mac с чипом Apple Silicon (M1 и новее). Приложение подписано Developer ID и прошло нотаризацию Apple. Выберите образ DMG или архив ZIP.',
+    dlBtnDmg: 'Скачать VoiceHelper {version} (DMG)',
     dlBtnZip: 'Скачать архив приложения (ZIP)',
     dlInstall: 'Инструкция установки',
     dlChecksums: 'Контрольные суммы SHA-256',
