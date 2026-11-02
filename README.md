@@ -69,4 +69,5 @@ first, then update the website's download links, visible version and metadata,
 these README links, and the release constants in Tests/site_test.py together.
 Do not overwrite a published installer with different bytes under the same URL.
 
-Three.js r170 is included under the MIT license: see [the license notice](site/vendor/LICENSE.txt).
+The setup video (`site/media/`) is the Russian guide with subtitles built into the picture.
+The website has no third-party scripts or trackers.

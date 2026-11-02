@@ -1,10 +1,10 @@
 {
-  "name": "VoiceHelper — Voice dictation at your text cursor for macOS",
+  "name": "VoiceHelper — voice typing for Mac at your text cursor",
   "short_name": "VoiceHelper",
-  "description": "Free local dictation app for macOS 13+. Press ⌥Space, speak, and insert text directly at the cursor in Terminal, VS Code, browsers, or messengers without losing focus. Local Whisper on Apple Silicon Metal, Deepgram Streaming, and OpenAI / Groq.",
+  "description": "Free voice typing for Mac. Press Option-Space in any app, speak, and the text appears at your cursor. Offline Whisper recognition on Apple Silicon.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#05070F",
+  "background_color": "#FFFFFF",
   "theme_color": "#1F94FA",
   "lang": "en",
   "icons": [
