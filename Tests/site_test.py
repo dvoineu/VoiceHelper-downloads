@@ -109,6 +109,9 @@ class VoiceHelperSiteTests(unittest.TestCase):
             SITE_DIR / "css" / "styles.css",
             SITE_DIR / "js" / "app.js",
             SITE_DIR / "js" / "i18n.js",
+            SITE_DIR / "js" / "scene3d.js",
+            SITE_DIR / "vendor" / "three.module.min.js",
+            SITE_DIR / "vendor" / "LICENSE.txt",
             SITE_DIR / "media" / "voicehelper-guide-ru.mp4",
             SITE_DIR / "media" / "voicehelper-guide-poster.jpg",
             SITE_DIR / "robots.txt",
@@ -182,7 +185,19 @@ class VoiceHelperSiteTests(unittest.TestCase):
         inspector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
         for resource in inspector.local_resources:
             self.assertFalse(urlparse(resource).netloc, resource)
-        self.assertFalse((SITE_DIR / "vendor").exists())
+        self.assertEqual(sorted(p.name for p in (SITE_DIR / "vendor").iterdir()), ["LICENSE.txt", "three.module.min.js"])
+
+    def test_hero_scene_is_optional_and_respects_motion_settings(self):
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("import('./scene3d.js')", app_js)
+        self.assertIn("supportsWebGL()", app_js)
+        scene_js = (SITE_DIR / "js" / "scene3d.js").read_text(encoding="utf-8")
+        self.assertIn("from '../vendor/three.module.min.js'", scene_js)
+        self.assertIn("prefers-reduced-motion: reduce", scene_js)
+        self.assertIn("IntersectionObserver", scene_js)
+        self.assertIn("visibilitychange", scene_js)
+        html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="hero-canvas" aria-hidden="true"', html)
 
     def test_every_translation_key_exists_in_both_languages(self):
         dictionary = load_dictionary()

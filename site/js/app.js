@@ -94,6 +94,7 @@ const demo = (() => {
   function setState(state) {
     const dict = I18N[currentLanguage];
     hud.dataset.state = state;
+    document.dispatchEvent(new CustomEvent('vh-demo', { detail: state }));
     statusEl.textContent = {
       listening: dict.demoListening,
       recognizing: dict.demoRecognizing,
@@ -183,6 +184,33 @@ function setupActiveNav() {
   }, { rootMargin: '-45% 0px -50% 0px' });
   sections.forEach((s) => observer.observe(s));
 }
+
+/* ---------- Hero 3D scene (loaded after the page, skipped without WebGL) ---------- */
+
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+function loadHeroScene() {
+  const canvas = document.getElementById('hero-canvas');
+  const anchor = document.getElementById('stage-anchor');
+  if (!canvas || !anchor || !supportsWebGL()) return;
+  import('./scene3d.js')
+    .then(({ HeroScene }) => {
+      new HeroScene({ canvas, host: canvas.parentElement, anchor });
+      canvas.classList.add('is-ready');
+    })
+    .catch(() => { /* the page works without the 3D scene */ });
+}
+
+const whenIdle = window.requestIdleCallback || ((fn) => window.setTimeout(fn, 200));
+if (document.readyState === 'complete') whenIdle(loadHeroScene);
+else window.addEventListener('load', () => whenIdle(loadHeroScene), { once: true });
 
 setupLanguageSwitch();
 setupChapters();

@@ -70,4 +70,6 @@ these README links, and the release constants in Tests/site_test.py together.
 Do not overwrite a published installer with different bytes under the same URL.
 
 The setup video (`site/media/`) is the Russian guide with subtitles built into the picture.
-The website has no third-party scripts or trackers.
+The website has no trackers. The 3D scene on the first screen uses Three.js r170,
+included locally under the MIT license: see [the license notice](site/vendor/LICENSE.txt).
+It loads after the page and is skipped without WebGL.
