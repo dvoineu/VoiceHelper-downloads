@@ -114,7 +114,7 @@ export const I18N = {
 
     videoKicker: 'Video guide',
     videoTitle: 'See the whole setup in 3 minutes',
-    videoSubtitle: 'Installation, permissions, model, shortcuts and voice commands. No sound needed: subtitles are part of the video.',
+    videoSubtitle: 'Installation, permissions, model, shortcuts and voice commands. Russian narration by DAV with built-in subtitles.',
     videoLangNote: 'The video is in Russian. Every step is also described above in English.',
     videoFallback: 'Your browser can’t play this video.',
     videoDownload: 'Download the video (MP4)',
@@ -286,7 +286,7 @@ export const I18N = {
 
     videoKicker: 'Видеоинструкция',
     videoTitle: 'Вся настройка за 3 минуты',
-    videoSubtitle: 'Установка, разрешения, модель, клавиши и голосовые команды. Звук не нужен: субтитры встроены в видео.',
+    videoSubtitle: 'Установка, разрешения, модель, клавиши и голосовые команды. Русская озвучка голосом DAV и встроенные субтитры.',
     videoLangNote: '',
     videoFallback: 'Ваш браузер не может воспроизвести это видео.',
     videoDownload: 'Скачать видео (MP4)',
