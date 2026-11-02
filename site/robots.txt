@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dvoineu.github.io/VoiceHelper-downloads/sitemap.xml
+Sitemap: https://dvoineu.github.io/Frazia/sitemap.xml
