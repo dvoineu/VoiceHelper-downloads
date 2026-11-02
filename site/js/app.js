@@ -34,35 +34,32 @@ let currentLanguage = 'en';
 /* ---------- Latest release ----------
  * The HTML links point at a known release, so downloads work without
  * JavaScript. On load the page asks GitHub for the latest published
- * release and, if it finds a DMG, points every download link at it and
+ * release and, if its Frazia assets are complete, replaces the links and
  * updates the version shown. Results are cached for an hour.
  */
 
 const REPO = 'dvoineu/VoiceHelper-downloads';
-const RELEASE_CACHE_KEY = 'voicehelper-latest-release';
-const release = { version: '1.1', build: '4' };
+const RELEASE_CACHE_KEY = 'frazia-latest-release';
+const release = { version: '1.1', build: '5' };
 
 function fill(value) {
   return value.replaceAll('{version}', release.version).replaceAll('{build}', release.build);
 }
 
 function parseRelease(data) {
-  const assets = data.assets || [];
-  const find = (test) => assets.find((a) => test(a.name))?.browser_download_url;
-  const dmg = find((n) => /\.dmg$/i.test(n));
-  if (!dmg) return null;
-  const match = /(\d+(?:\.\d+)*)[-_. ]*(?:build[-_. ]*|\()?(\d+)\)?/i.exec(data.tag_name || '')
-    || /VoiceHelper-(\d+(?:\.\d+)*)-(\d+)/i.exec(dmg);
-  return {
-    version: match ? match[1] : null,
-    build: match ? match[2] : null,
-    links: {
-      dmg,
-      zip: find((n) => /\.zip$/i.test(n)),
-      install: find((n) => /^INSTALL/i.test(n)),
-      checksums: find((n) => /^SHA256SUMS/i.test(n)),
-    },
+  const match = /^v(\d+(?:\.\d+)*)-build\.(\d+)$/.exec(data.tag_name || '');
+  if (!match || !Array.isArray(data.assets)) return null;
+  const [, version, build] = match;
+  const stem = `Frazia-${version}-${build}-arm64`;
+  const asset = (name) => data.assets.find((entry) => entry.name === name)?.browser_download_url;
+  const links = {
+    dmg: asset(stem + '.dmg'),
+    zip: asset(stem + '.zip'),
+    install: asset('INSTALL.txt'),
+    checksums: asset('SHA256SUMS'),
   };
+  if (!Object.values(links).every(Boolean)) return null;
+  return { version, build, links };
 }
 
 function applyRelease(info) {
