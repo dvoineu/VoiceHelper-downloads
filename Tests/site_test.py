@@ -112,7 +112,7 @@ class FraziaSiteTests(unittest.TestCase):
             SITE_DIR / "js" / "scene3d.js",
             SITE_DIR / "vendor" / "three.module.min.js",
             SITE_DIR / "vendor" / "LICENSE.txt",
-            SITE_DIR / "media" / "frazia-guide-ru.mp4",
+            SITE_DIR / "media" / "frazia-guide-ru-dav-v4.mp4",
             SITE_DIR / "media" / "frazia-guide-poster.jpg",
             SITE_DIR / "robots.txt",
             SITE_DIR / "sitemap.xml",
@@ -232,13 +232,13 @@ class FraziaSiteTests(unittest.TestCase):
 
     def test_video_guide_and_chapters(self):
         html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
-        self.assertIn('src="./media/frazia-guide-ru.mp4"', html)
+        self.assertIn('src="./media/frazia-guide-ru-dav-v4.mp4"', html)
         self.assertIn('poster="./media/frazia-guide-poster.jpg"', html)
         seeks = [int(value) for value in re.findall(r'data-seek="(\d+)"', html)]
         self.assertEqual(len(seeks), 10)
         self.assertEqual(seeks, sorted(seeks))
         self.assertLess(seeks[-1], 201)
-        video = SITE_DIR / "media" / "frazia-guide-ru.mp4"
+        video = SITE_DIR / "media" / "frazia-guide-ru-dav-v4.mp4"
         self.assertLess(video.stat().st_size, 20 * 1024 * 1024)
 
     def test_sitemap_and_manifest_valid(self):
