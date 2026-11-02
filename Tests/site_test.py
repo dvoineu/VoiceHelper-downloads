@@ -19,7 +19,6 @@ class SemanticHTMLInspector(HTMLParser):
         self.headings = []
         self.images = []
         self.details_names = []
-        self.scroll_progress_attrs = None
         self.meta_tags = []
         self.link_tags = []
         self.anchors = []
@@ -40,8 +39,6 @@ class SemanticHTMLInspector(HTMLParser):
             self.images.append(attr_dict)
         elif tag == "details":
             self.details_names.append(attr_dict.get("name"))
-        elif tag == "div" and attr_dict.get("id") == "scroll-progress":
-            self.scroll_progress_attrs = attr_dict
         elif tag == "meta":
             self.meta_tags.append(attr_dict)
         elif tag == "link":
@@ -60,20 +57,67 @@ class SemanticHTMLInspector(HTMLParser):
             self._current_json_ld.append(data)
 
 
+class I18nTextCollector(HTMLParser):
+    """Collects the English fallback text of leaf elements marked with data-i18n."""
+
+    def __init__(self):
+        super().__init__()
+        self.keys = {"text": [], "html": [], "aria": []}
+        self.texts = {}
+        self._stack = []
+
+    def handle_starttag(self, tag, attrs):
+        attr_dict = dict(attrs)
+        if "data-i18n" in attr_dict:
+            self.keys["text"].append(attr_dict["data-i18n"])
+        if "data-i18n-html" in attr_dict:
+            self.keys["html"].append(attr_dict["data-i18n-html"])
+        if "data-i18n-aria-label" in attr_dict:
+            self.keys["aria"].append(attr_dict["data-i18n-aria-label"])
+        if tag in {"img", "meta", "link", "source", "br", "input"}:
+            return
+        self._stack.append([attr_dict.get("data-i18n"), ""])
+
+    def handle_endtag(self, tag):
+        if not self._stack:
+            return
+        key, text = self._stack.pop()
+        if key:
+            self.texts.setdefault(key, set()).add(" ".join(text.split()))
+        if self._stack:
+            self._stack[-1][1] += text
+
+    def handle_data(self, data):
+        if self._stack:
+            self._stack[-1][1] += data
+
+
+def load_dictionary():
+    source = (SITE_DIR / "js" / "i18n.js").read_text(encoding="utf-8")
+    english, russian = source.split("\n  ru: {", 1)
+    pattern = re.compile(r"^    (\w+): '((?:[^'\\]|\\.)*)',$", re.MULTILINE)
+    return {
+        "en": dict(pattern.findall(english)),
+        "ru": dict(pattern.findall(russian)),
+    }
+
+
 class VoiceHelperSiteTests(unittest.TestCase):
     def test_site_files_exist(self):
         required = [
             SITE_DIR / "index.html",
             SITE_DIR / "css" / "styles.css",
             SITE_DIR / "js" / "app.js",
-            SITE_DIR / "js" / "scene3d.js",
             SITE_DIR / "js" / "i18n.js",
+            SITE_DIR / "js" / "scene3d.js",
             SITE_DIR / "vendor" / "three.module.min.js",
+            SITE_DIR / "vendor" / "LICENSE.txt",
+            SITE_DIR / "media" / "voicehelper-guide-ru.mp4",
+            SITE_DIR / "media" / "voicehelper-guide-poster.jpg",
             SITE_DIR / "robots.txt",
             SITE_DIR / "sitemap.xml",
             SITE_DIR / "site.webmanifest",
             SITE_DIR / "assets" / "favicon.svg",
-            SITE_DIR / "assets" / "og-cover.svg",
             SITE_DIR / "assets" / "icon-192.png",
             SITE_DIR / "assets" / "icon-512.png",
         ]
@@ -96,10 +140,6 @@ class VoiceHelperSiteTests(unittest.TestCase):
                 1,
                 f"Heading hierarchy skipped from h{prev} to h{curr}",
             )
-
-        # Scroll progress bar must have aria-hidden="true"
-        self.assertIsNotNone(inspector.scroll_progress_attrs)
-        self.assertEqual(inspector.scroll_progress_attrs.get("aria-hidden"), "true")
 
         # All images must declare width, height, and alt
         self.assertGreaterEqual(len(inspector.images), 2)
@@ -132,18 +172,74 @@ class VoiceHelperSiteTests(unittest.TestCase):
         self.assertIn("FAQPage", graph_types)
         self.assertIn("WebSite", graph_types)
 
-    def test_modern_web_guidance_css_and_threejs_lifecycle(self):
+    def test_css_supports_dark_mode_reduced_motion_and_small_screens(self):
         css_text = (SITE_DIR / "css" / "styles.css").read_text(encoding="utf-8")
-        self.assertIn("content-visibility: auto", css_text)
-        self.assertIn("contain-intrinsic-size:", css_text)
+        self.assertIn("prefers-color-scheme: dark", css_text)
         self.assertIn("prefers-reduced-motion: reduce", css_text)
-        self.assertIn("animation-timeline: scroll", css_text)
-        self.assertIn("timeline-scope:", css_text)
+        self.assertIn("max-width: 640px", css_text)
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("prefers-reduced-motion: reduce", app_js)
 
+    def test_no_third_party_scripts(self):
+        inspector = SemanticHTMLInspector()
+        inspector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
+        for resource in inspector.local_resources:
+            self.assertFalse(urlparse(resource).netloc, resource)
+        self.assertEqual(sorted(p.name for p in (SITE_DIR / "vendor").iterdir()), ["LICENSE.txt", "three.module.min.js"])
+
+    def test_download_links_follow_latest_release(self):
+        html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
+        for kind in ["dmg", "zip", "install", "checksums", "label"]:
+            self.assertIn(f'data-release="{kind}"', html)
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("api.github.com/repos/${REPO}/releases/latest", app_js)
+        self.assertIn("const REPO = 'dvoineu/VoiceHelper-downloads';", app_js)
+
+    def test_hero_scene_is_optional_and_respects_motion_settings(self):
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("import('./scene3d.js')", app_js)
+        self.assertIn("supportsWebGL()", app_js)
         scene_js = (SITE_DIR / "js" / "scene3d.js").read_text(encoding="utf-8")
-        self.assertIn("THREE.WebGLRenderer", scene_js)
-        self.assertIn("contentvisibilityautostatechange", scene_js)
+        self.assertIn("from '../vendor/three.module.min.js'", scene_js)
         self.assertIn("prefers-reduced-motion: reduce", scene_js)
+        self.assertIn("IntersectionObserver", scene_js)
+        self.assertIn("visibilitychange", scene_js)
+        html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="hero-canvas" aria-hidden="true"', html)
+
+    def test_every_translation_key_exists_in_both_languages(self):
+        dictionary = load_dictionary()
+        self.assertGreater(len(dictionary["en"]), 100)
+        self.assertEqual(set(dictionary["en"]), set(dictionary["ru"]))
+        collector = I18nTextCollector()
+        collector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
+        used = set(collector.keys["text"] + collector.keys["html"] + collector.keys["aria"])
+        missing = used - set(dictionary["en"])
+        self.assertFalse(missing, f"Keys used in HTML but missing from i18n.js: {sorted(missing)}")
+        for key in collector.keys["text"] + collector.keys["html"]:
+            if key != "videoLangNote":
+                self.assertTrue(dictionary["en"][key] and dictionary["ru"][key], key)
+
+    def test_english_html_fallback_matches_dictionary(self):
+        dictionary = load_dictionary()["en"]
+        collector = I18nTextCollector()
+        collector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
+        for key, texts in collector.texts.items():
+            value = dictionary[key].replace("{version}", "1.1").replace("{build}", "4")
+            expected = " ".join(value.replace("&amp;", "&").split())
+            for text in texts:
+                self.assertEqual(text, expected, key)
+
+    def test_video_guide_and_chapters(self):
+        html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
+        self.assertIn('src="./media/voicehelper-guide-ru.mp4"', html)
+        self.assertIn('poster="./media/voicehelper-guide-poster.jpg"', html)
+        seeks = [int(value) for value in re.findall(r'data-seek="(\d+)"', html)]
+        self.assertEqual(len(seeks), 10)
+        self.assertEqual(seeks, sorted(seeks))
+        self.assertLess(seeks[-1], 201)
+        video = SITE_DIR / "media" / "voicehelper-guide-ru.mp4"
+        self.assertLess(video.stat().st_size, 20 * 1024 * 1024)
 
     def test_sitemap_and_manifest_valid(self):
         manifest = json.loads((SITE_DIR / "site.webmanifest").read_text(encoding="utf-8"))
@@ -232,7 +328,7 @@ class VoiceHelperSiteTests(unittest.TestCase):
             self.assertEqual(len(re.findall(r'\b' + key + r':\s*[\'\"][^\'\"]+', dictionary)), 2, key)
         self.assertIn(PUBLIC_REPO + "/releases/tag/v1.1-build.4", html)
         self.assertNotIn("v1.1-build.3", html)
-        self.assertIn("VoiceHelper 1.1 (4)", html)
+        self.assertIn('VoiceHelper <span data-release="label">1.1 (4)</span>', html)
 
 
 if __name__ == "__main__":

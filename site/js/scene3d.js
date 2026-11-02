@@ -1,641 +1,341 @@
 import * as THREE from '../vendor/three.module.min.js';
 
 /**
- * VoiceHelper — Spatial Acoustic Caret Observatory (Three.js 3D Engine)
- * Features:
- * 1. Real-time vertex-displaced Acoustic Ferrofluid Core + Wireframe Geodesic Shell
- * 2. 5 Sculptural 3D VoiceHelper Wave Pillars (matching AppIcon.png proportions)
- * 3. Raycast-interactive 3D macOS Keycaps (⌥ Option + Space) with spring physics
- * 4. 3D I-Beam Text Caret & Gyroscopic Reticle Rings
- * 5. 2,400-Particle Morphing Cloud across 5 scroll/interactive formations:
- *    [0: Resonance, 1: Caret Lock, 2: Metal GPU Lattice, 3: AES-GCM Vault, 4: 14-Language Globe]
+ * Hero 3D scene: the VoiceHelper icon as a glossy tile whose five white
+ * wave bars react to the dictation demo, emitting rings of sound particles.
+ *
+ * - Anchored to a DOM element (.stage-anchor), so it follows the layout.
+ * - Reacts to the demo state ('vh-demo' events): listening, recognizing, inserted.
+ * - Follows the pointer, adapts to light and dark appearance.
+ * - Pauses when the hero is off screen or the tab is hidden; with
+ *   prefers-reduced-motion: reduce it draws a single still frame.
  */
-export class VoiceHelperScene3D {
-  constructor(canvas, options = {}) {
+
+const BAR_HEIGHTS = [126, 242, 358, 242, 126].map((h) => h / 358); // from the app icon
+const TILE = 4; // tile edge in world units
+const ENERGY = { listening: 1, recognizing: 0.55, inserted: 0.12 };
+
+export class HeroScene {
+  constructor({ canvas, host, anchor }) {
     this.canvas = canvas;
-    this.onKeycapClick = options.onKeycapClick || (() => {});
-    this.onFormationChange = options.onFormationChange || (() => {});
-
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.isPaused = false;
-    this.isRecording = false;
-    this.audioEnergy = 0.08;
-    this.audioBands = new Float32Array(24).fill(0.08);
-    this.scrollProgress = 0;
-    this.activeFormation = 0;
-    this.manualFormationOverride = null;
-    this.keyPressSpring = 0;
-    this.shockwaveProgress = 0;
-
-    this.pointer = new THREE.Vector2(0, 0);
-    this.targetPointer = new THREE.Vector2(0, 0);
-    this.raycaster = new THREE.Raycaster();
+    this.host = host;
+    this.anchor = anchor;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    this.pointer = new THREE.Vector2();
+    this.pointerTarget = new THREE.Vector2();
+    this.energy = 1;
+    this.energyTarget = 1;
+    this.sweep = 0;
+    this.visible = true;
+    this.running = false;
     this.clock = new THREE.Clock();
+    this.time = 0;
 
-    this.init();
-  }
-
-  init() {
-    if (!this.canvas) return;
-
-    try {
-      this.renderer = new THREE.WebGLRenderer({
-        canvas: this.canvas,
-        antialias: true,
-        alpha: true,
-        powerPreference: 'high-performance',
-      });
-    } catch (err) {
-      console.warn('WebGL initialization fallback:', err);
-      return;
-    }
-
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(
-      42,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      100
-    );
-    this.camera.position.set(0, 0.2, 9.2);
+    this.camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
+    this.camera.position.set(0, 0, 30);
 
-    // Master offset group (shifts slightly right on desktop so hero copy on left breathes)
-    this.stageRoot = new THREE.Group();
-    this.updateStageOffset();
-    this.scene.add(this.stageRoot);
+    this.stage = new THREE.Group();
+    this.scene.add(this.stage);
 
-    this.setupLights();
-    this.buildAcousticCore();
-    this.buildHarmonicPillars();
-    this.buildOrbitalReticle();
-    this.buildCaretSculpture();
-    this.buildTactileKeycaps();
-    this.buildMorphingParticles();
+    this.buildLights();
+    this.buildTile();
+    this.buildRings();
+    this.applyTheme();
     this.bindEvents();
+    this.resize();
+    this.renderOnce();
+    if (!this.reducedMotion.matches) this.start();
+  }
 
-    this.renderFrame();
-    if (!this.reducedMotion) {
-      this.startLoop();
+  /* ---------- Build ---------- */
+
+  buildLights() {
+    this.scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+    const key = new THREE.DirectionalLight(0xffffff, 2.2);
+    key.position.set(-4, 6, 10);
+    this.scene.add(key);
+    this.rim = new THREE.PointLight(0x7c5cff, 40, 30, 1.6);
+    this.rim.position.set(6, -3, 6);
+    this.scene.add(this.rim);
+    this.fill = new THREE.PointLight(0x2fa4ff, 30, 30, 1.6);
+    this.fill.position.set(-6, 4, 4);
+    this.scene.add(this.fill);
+  }
+
+  buildTile() {
+    this.tileGroup = new THREE.Group();
+    this.stage.add(this.tileGroup);
+
+    // Rounded square like the app icon, extruded with a soft bevel.
+    const r = 0.9;
+    const h = TILE / 2 - 0.12;
+    const shape = new THREE.Shape();
+    shape.moveTo(-h + r, -h);
+    shape.lineTo(h - r, -h);
+    shape.quadraticCurveTo(h, -h, h, -h + r);
+    shape.lineTo(h, h - r);
+    shape.quadraticCurveTo(h, h, h - r, h);
+    shape.lineTo(-h + r, h);
+    shape.quadraticCurveTo(-h, h, -h, h - r);
+    shape.lineTo(-h, -h + r);
+    shape.quadraticCurveTo(-h, -h, -h + r, -h);
+    const geom = new THREE.ExtrudeGeometry(shape, {
+      depth: 0.42, bevelEnabled: true, bevelThickness: 0.14, bevelSize: 0.12, bevelSegments: 6, curveSegments: 24,
+    });
+    geom.translate(0, 0, -0.42);
+
+    // Brand gradient (#1F94FA → #4F33D6) along the diagonal, as vertex colors.
+    const from = new THREE.Color(0x1f94fa);
+    const to = new THREE.Color(0x4f33d6);
+    const pos = geom.attributes.position;
+    const colors = new Float32Array(pos.count * 3);
+    const c = new THREE.Color();
+    for (let i = 0; i < pos.count; i += 1) {
+      const t = THREE.MathUtils.clamp((pos.getX(i) - pos.getY(i)) / (TILE * 1.1) + 0.5, 0, 1);
+      c.copy(from).lerp(to, t);
+      colors.set([c.r, c.g, c.b], i * 3);
     }
-  }
+    geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const tile = new THREE.Mesh(geom, new THREE.MeshPhysicalMaterial({
+      vertexColors: true, roughness: 0.3, metalness: 0.05, clearcoat: 1, clearcoatRoughness: 0.12,
+      emissive: 0x2a4fd8, emissiveIntensity: 0.55,
+    }));
+    this.tileGroup.add(tile);
 
-  updateStageOffset() {
-    if (!this.stageRoot) return;
-    const isWide = window.innerWidth > 1024;
-    this.stageRoot.position.x = isWide ? 2.15 : 0;
-    this.stageRoot.position.y = isWide ? 0.15 : -0.4;
-  }
+    // Frosted inner plate, as in the icon.
+    const plate = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.95, 1.55, 8, 24),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12 }),
+    );
+    plate.rotation.z = Math.PI / 2;
+    plate.scale.set(1, 1, 0.05);
+    plate.position.z = 0.15;
+    this.tileGroup.add(plate);
 
-  setupLights() {
-    const ambient = new THREE.AmbientLight(0x1e293b, 1.8);
-    this.scene.add(ambient);
-
-    this.cyanLight = new THREE.PointLight(0x1f94fa, 18, 22, 1.6);
-    this.cyanLight.position.set(4.5, 3.8, 5.0);
-    this.stageRoot.add(this.cyanLight);
-
-    this.indigoLight = new THREE.PointLight(0x4f33d6, 16, 22, 1.6);
-    this.indigoLight.position.set(-4.5, -3.2, 4.2);
-    this.stageRoot.add(this.indigoLight);
-
-    this.emeraldLight = new THREE.PointLight(0x22c55e, 0, 18, 1.5);
-    this.emeraldLight.position.set(0, 0.5, 4.8);
-    this.stageRoot.add(this.emeraldLight);
-  }
-
-  buildAcousticCore() {
-    this.coreGroup = new THREE.Group();
-    this.stageRoot.add(this.coreGroup);
-
-    const geom = new THREE.IcosahedronGeometry(1.38, 12);
-    const posAttr = geom.attributes.position;
-    this.baseCorePositions = new Float32Array(posAttr.array.length);
-    this.baseCorePositions.set(posAttr.array);
-
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: 0x0d1b38,
-      emissive: 0x102a5c,
-      emissiveIntensity: 0.55,
-      metalness: 0.35,
-      roughness: 0.18,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.12,
-      iridescence: 0.85,
-      iridescenceIOR: 1.4,
-      transparent: true,
-      opacity: 0.72,
-    });
-
-    this.coreMesh = new THREE.Mesh(geom, mat);
-    this.coreGroup.add(this.coreMesh);
-
-    const wireGeom = new THREE.IcosahedronGeometry(1.52, 3);
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.22,
-    });
-    this.coreWireframe = new THREE.Mesh(wireGeom, wireMat);
-    this.coreGroup.add(this.coreWireframe);
-  }
-
-  buildHarmonicPillars() {
-    // Proportions from Scripts/generate-icon.swift: [126, 242, 358, 242, 126]
-    this.pillarsGroup = new THREE.Group();
-    this.stageRoot.add(this.pillarsGroup);
-
-    const baseHeights = [0.52, 0.96, 1.42, 0.96, 0.52];
-    const spacing = 0.36;
-    this.pillars = [];
-
-    const pillarMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf8fafc,
-      emissive: 0x38bdf8,
-      emissiveIntensity: 0.65,
-      metalness: 0.2,
-      roughness: 0.1,
-      clearcoat: 1.0,
-    });
-
-    baseHeights.forEach((h, idx) => {
-      const geom = new THREE.CapsuleGeometry(0.085, h, 12, 20);
-      const mesh = new THREE.Mesh(geom, pillarMat.clone());
-      mesh.position.x = (idx - 2) * spacing;
-      mesh.position.z = 0.25;
-      mesh.userData = { baseHeight: h, index: idx };
-      this.pillarsGroup.add(mesh);
-      this.pillars.push(mesh);
+    // Five white bars standing out of the tile.
+    this.bars = BAR_HEIGHTS.map((height, i) => {
+      const bar = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.13, 1, 6, 16),
+        new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.2, clearcoat: 1, emissive: 0xffffff, emissiveIntensity: 0.85 }),
+      );
+      bar.position.set((i - 2) * 0.48, 0, 0.32);
+      bar.userData.base = height;
+      this.tileGroup.add(bar);
+      return bar;
     });
   }
 
-  buildOrbitalReticle() {
-    this.reticleGroup = new THREE.Group();
-    this.stageRoot.add(this.reticleGroup);
-
-    const ringSpecs = [
-      { radius: 2.15, tube: 0.012, color: 0x38bdf8, opacity: 0.42, rot: [0.35, 0.2, 0] },
-      { radius: 2.55, tube: 0.009, color: 0x818cf8, opacity: 0.28, rot: [-0.45, 0.5, 0.2] },
-      { radius: 2.95, tube: 0.007, color: 0x22c55e, opacity: 0.18, rot: [0.2, -0.4, 0.6] },
-    ];
-
-    this.rings = ringSpecs.map((spec) => {
-      const geom = new THREE.TorusGeometry(spec.radius, spec.tube, 12, 120);
-      const mat = new THREE.MeshBasicMaterial({
-        color: spec.color,
-        transparent: true,
-        opacity: spec.opacity,
-      });
-      const mesh = new THREE.Mesh(geom, mat);
-      mesh.rotation.set(...spec.rot);
-      this.reticleGroup.add(mesh);
-      return mesh;
-    });
-
-    // Expanding shockwave ring on ⌥Space press
-    const shockGeom = new THREE.TorusGeometry(1.4, 0.025, 16, 120);
-    const shockMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      transparent: true,
-      opacity: 0,
-    });
-    this.shockwaveRing = new THREE.Mesh(shockGeom, shockMat);
-    this.stageRoot.add(this.shockwaveRing);
-  }
-
-  buildCaretSculpture() {
-    this.caretGroup = new THREE.Group();
-    this.stageRoot.add(this.caretGroup);
-
-    const caretMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      transparent: true,
-      opacity: 0.0,
-    });
-
-    const stem = new THREE.Mesh(new THREE.BoxGeometry(0.09, 2.5, 0.09), caretMat);
-    const topBar = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.08, 0.09), caretMat);
-    topBar.position.y = 1.25;
-    const botBar = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.08, 0.09), caretMat);
-    botBar.position.y = -1.25;
-
-    this.caretGroup.add(stem, topBar, botBar);
-    this.caretMat = caretMat;
-    this.caretGroup.position.set(1.9, 0.1, 0.7);
-  }
-
-  createKeycapTexture(topText, mainText, width = 256, height = 256) {
-    const c = document.createElement('canvas');
-    c.width = width;
-    c.height = height;
-    const ctx = c.getContext('2d');
-
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(10, 10, width - 20, height - 20);
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '600 26px ui-monospace, SFMono-Regular, Menlo, monospace';
-    ctx.fillText(topText, 26, 52);
-
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = '700 44px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(mainText, 26, height - 34);
-
-    const tex = new THREE.CanvasTexture(c);
-    tex.anisotropy = 4;
-    return tex;
-  }
-
-  buildTactileKeycaps() {
-    this.keycapsGroup = new THREE.Group();
-    this.keycapsGroup.position.set(0, -2.18, 1.15);
-    this.keycapsGroup.rotation.x = 0.42;
-    this.stageRoot.add(this.keycapsGroup);
-
-    const sideMat = new THREE.MeshStandardMaterial({
-      color: 0x090d16,
-      roughness: 0.4,
-      metalness: 0.5,
-    });
-
-    const optTex = this.createKeycapTexture('alt', '⌥ Option', 256, 256);
-    const spaceTex = this.createKeycapTexture('dictate', 'Space · Голос', 512, 256);
-
-    const optMaterials = [
-      sideMat, sideMat,
-      new THREE.MeshStandardMaterial({ map: optTex, roughness: 0.25, metalness: 0.2 }),
-      sideMat, sideMat, sideMat,
-    ];
-    const spaceMaterials = [
-      sideMat, sideMat,
-      new THREE.MeshStandardMaterial({ map: spaceTex, roughness: 0.25, metalness: 0.2 }),
-      sideMat, sideMat, sideMat,
-    ];
-
-    this.optKeyMesh = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.28, 0.85), optMaterials);
-    this.optKeyMesh.position.set(-0.98, 0, 0);
-    this.optKeyMesh.userData.isKeycap = true;
-
-    this.spaceKeyMesh = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.28, 0.85), spaceMaterials);
-    this.spaceKeyMesh.position.set(0.58, 0, 0);
-    this.spaceKeyMesh.userData.isKeycap = true;
-
-    this.keycapsGroup.add(this.optKeyMesh, this.spaceKeyMesh);
-  }
-
-  buildMorphingParticles() {
-    const count = 2400;
-    this.particleCount = count;
-
-    this.formations = [
-      new Float32Array(count * 3), // 0: Acoustic Resonance Sphere/Wave
-      new Float32Array(count * 3), // 1: Caret & HUD Capsule Lock
-      new Float32Array(count * 3), // 2: Apple Silicon Metal Tensor Lattice
-      new Float32Array(count * 3), // 3: AES-GCM Cryptographic Octahedron Vault
-      new Float32Array(count * 3), // 4: 14-Language Planetary Globe
-    ];
-
-    const currentPositions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-
-    const colorCyan = new THREE.Color(0x38bdf8);
-    const colorIndigo = new THREE.Color(0x818cf8);
-    const colorEmerald = new THREE.Color(0x22c55e);
-
-    for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
-      const t = i / count;
-
-      // Formation 0: Fibonacci Acoustic Wave Sphere + Spiral Disc
-      const phi = Math.acos(1 - 2 * t);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-      const r0 = 2.1 + 0.55 * Math.sin(t * Math.PI * 12);
-      this.formations[0][i3] = r0 * Math.sin(phi) * Math.cos(theta);
-      this.formations[0][i3 + 1] = r0 * Math.sin(phi) * Math.sin(theta);
-      this.formations[0][i3 + 2] = r0 * Math.cos(phi);
-
-      // Formation 1: Giant I-Beam Caret + Floating HUD Frame
-      if (i < count * 0.45) {
-        // Vertical I-Beam Caret
-        const u = (i / (count * 0.45)) * 2 - 1;
-        this.formations[1][i3] = (Math.random() - 0.5) * 0.24 - 1.45;
-        this.formations[1][i3 + 1] = u * 2.35;
-        this.formations[1][i3 + 2] = (Math.random() - 0.5) * 0.24;
-      } else {
-        // Floating HUD Capsule next to Caret
-        const u = (i - count * 0.45) / (count * 0.55);
-        const angle = u * Math.PI * 2;
-        const rx = 1.65;
-        const ry = 0.65;
-        this.formations[1][i3] = 0.65 + Math.cos(angle) * rx + (Math.random() - 0.5) * 0.15;
-        this.formations[1][i3 + 1] = Math.sin(angle) * ry + (Math.random() - 0.5) * 0.15;
-        this.formations[1][i3 + 2] = (Math.random() - 0.5) * 0.4;
-      }
-
-      // Formation 2: Apple Silicon Metal 3D Tensor Grid (16x15x10 matrix)
-      const gx = (i % 16) - 7.5;
-      const gy = (Math.floor(i / 16) % 15) - 7.0;
-      const gz = Math.floor(i / 240) - 4.5;
-      this.formations[2][i3] = gx * 0.28;
-      this.formations[2][i3 + 1] = gy * 0.24;
-      this.formations[2][i3 + 2] = gz * 0.28;
-
-      // Formation 3: AES-GCM Cryptographic Octahedron Shield
-      const octAngle = theta;
-      const octV = (i % 120) / 120;
-      const octR = 2.45 * (1 - Math.abs(octV * 2 - 1));
-      this.formations[3][i3] = octR * Math.cos(octAngle);
-      this.formations[3][i3 + 1] = (octV * 2 - 1) * 2.45;
-      this.formations[3][i3 + 2] = octR * Math.sin(octAngle);
-
-      // Formation 4: 14-Language Globe with Latitude/Longitude Bands
-      const latBand = (Math.floor(i / 40) / 60) * Math.PI;
-      const lonBand = ((i % 40) / 40) * Math.PI * 2;
-      const globeR = 2.35;
-      this.formations[4][i3] = globeR * Math.sin(latBand) * Math.cos(lonBand);
-      this.formations[4][i3 + 1] = globeR * Math.cos(latBand);
-      this.formations[4][i3 + 2] = globeR * Math.sin(latBand) * Math.sin(lonBand);
-
-      // Copy initial positions
-      currentPositions[i3] = this.formations[0][i3];
-      currentPositions[i3 + 1] = this.formations[0][i3 + 1];
-      currentPositions[i3 + 2] = this.formations[0][i3 + 2];
-
-      // Color gradient
-      const mixed = colorCyan.clone().lerp(colorIndigo, (i % 100) / 100);
-      if (i % 17 === 0) mixed.lerp(colorEmerald, 0.7);
-      colors[i3] = mixed.r;
-      colors[i3 + 1] = mixed.g;
-      colors[i3 + 2] = mixed.b;
+  buildRings() {
+    // Sound rings: each particle has an angle and a phase; the vertex shader
+    // moves it outward over time, so rings keep leaving the tile.
+    const count = window.innerWidth < 700 ? 1600 : 3200;
+    const angles = new Float32Array(count);
+    const phases = new Float32Array(count);
+    const seeds = new Float32Array(count);
+    const rings = 9;
+    for (let i = 0; i < count; i += 1) {
+      angles[i] = Math.random() * Math.PI * 2;
+      phases[i] = (Math.floor(Math.random() * rings) + Math.random() * 0.12) / rings;
+      seeds[i] = Math.random();
     }
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
+    geom.setAttribute('aAngle', new THREE.BufferAttribute(angles, 1));
+    geom.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
+    geom.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
 
-    const particleGeom = new THREE.BufferGeometry();
-    particleGeom.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
-    particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.042,
-      vertexColors: true,
+    this.ringUniforms = {
+      uTime: { value: 0 },
+      uEnergy: { value: 1 },
+      uPixelRatio: { value: this.renderer.getPixelRatio() },
+      uScale: { value: 1 },
+      uColorA: { value: new THREE.Color(0x1f94fa) },
+      uColorB: { value: new THREE.Color(0x7c5cff) },
+      uAlpha: { value: 1 },
+    };
+    const material = new THREE.ShaderMaterial({
+      uniforms: this.ringUniforms,
       transparent: true,
-      opacity: 0.84,
-      blending: THREE.AdditiveBlending,
       depthWrite: false,
+      vertexShader: /* glsl */`
+        attribute float aAngle;
+        attribute float aPhase;
+        attribute float aSeed;
+        uniform float uTime;
+        uniform float uEnergy;
+        uniform float uPixelRatio;
+        uniform float uScale;
+        varying float vFade;
+        varying float vMix;
+        void main() {
+          float speed = 0.05 + 0.07 * uEnergy;
+          float p = fract(aPhase + uTime * speed);
+          float radius = 2.6 + p * 12.0;
+          float wobble = sin(aAngle * 6.0 + uTime * 1.6 + aSeed * 6.28) * (0.12 + 0.35 * uEnergy) * (1.0 - p);
+          vec3 pos = vec3(cos(aAngle) * (radius + wobble), sin(aAngle) * (radius + wobble) * 0.92, (aSeed - 0.5) * 1.2 - p * 2.0);
+          vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+          gl_Position = projectionMatrix * mv;
+          gl_PointSize = (2.2 + aSeed * 3.2) * uPixelRatio * (36.0 / -mv.z);
+          vFade = smoothstep(0.0, 0.08, p) * pow(1.0 - p, 1.6);
+          vMix = 0.5 + 0.5 * sin(aAngle + 0.8);
+        }
+      `,
+      fragmentShader: /* glsl */`
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        uniform float uAlpha;
+        uniform float uEnergy;
+        varying float vFade;
+        varying float vMix;
+        void main() {
+          float d = length(gl_PointCoord - 0.5);
+          if (d > 0.5) discard;
+          float soft = smoothstep(0.5, 0.1, d);
+          gl_FragColor = vec4(mix(uColorA, uColorB, vMix), soft * vFade * uAlpha * (0.45 + 0.55 * uEnergy));
+        }
+      `,
     });
-
-    this.particles = new THREE.Points(particleGeom, particleMat);
-    this.stageRoot.add(this.particles);
+    this.rings = new THREE.Points(geom, material);
+    this.rings.frustumCulled = false;
+    this.rings.rotation.x = -0.18;
+    this.stage.add(this.rings);
   }
+
+  applyTheme() {
+    const dark = this.darkQuery.matches;
+    const material = this.rings.material;
+    material.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+    this.ringUniforms.uAlpha.value = dark ? 0.95 : 0.75;
+    this.ringUniforms.uColorA.value.set(dark ? 0x38a8ff : 0x2f7cf6);
+    this.ringUniforms.uColorB.value.set(dark ? 0x8f7bff : 0x6a4ff0);
+    material.needsUpdate = true;
+    this.renderOnce();
+  }
+
+  /* ---------- Layout ---------- */
+
+  resize() {
+    const rect = this.host.getBoundingClientRect();
+    const width = Math.max(1, rect.width);
+    const height = Math.max(1, rect.height);
+    this.renderer.setSize(width, height, false);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    this.placeStage(rect);
+    this.renderOnce();
+  }
+
+  placeStage(hostRect = this.host.getBoundingClientRect()) {
+    const a = this.anchor.getBoundingClientRect();
+    if (!a.width || !a.height) return;
+    const cx = a.left + a.width / 2 - hostRect.left;
+    const cy = a.top + a.height / 2 - hostRect.top;
+    const dist = this.camera.position.z;
+    const worldPerPx = (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * dist) / hostRect.height;
+    this.stage.position.set(
+      (cx - hostRect.width / 2) * worldPerPx,
+      -(cy - hostRect.height / 2) * worldPerPx,
+      0,
+    );
+    const tilePx = Math.min(a.height * 0.74, a.width * 0.5);
+    const scale = (tilePx * worldPerPx) / TILE;
+    this.stage.scale.setScalar(scale);
+    this.ringUniforms.uScale.value = scale;
+  }
+
+  /* ---------- Events ---------- */
 
   bindEvents() {
-    window.addEventListener('resize', () => {
-      if (!this.renderer || !this.camera) return;
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.updateStageOffset();
-      if (this.reducedMotion) this.renderFrame();
-    });
+    this.onResize = () => this.resize();
+    new ResizeObserver(this.onResize).observe(this.host);
+    window.addEventListener('resize', this.onResize);
 
-    window.addEventListener('pointermove', (e) => {
-      this.targetPointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-      this.targetPointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    window.addEventListener('pointermove', (event) => {
+      this.pointerTarget.set(
+        (event.clientX / window.innerWidth) * 2 - 1,
+        (event.clientY / window.innerHeight) * 2 - 1,
+      );
     }, { passive: true });
 
-    // Click on 3D keycaps
-    this.canvas.addEventListener('pointerdown', (e) => {
-      if (!this.camera || !this.keycapsGroup) return;
-      const rect = this.canvas.getBoundingClientRect();
-      const mouse = new THREE.Vector2(
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -((e.clientY - rect.top) / rect.height) * 2 + 1
-      );
-      this.raycaster.setFromCamera(mouse, this.camera);
-      const hits = this.raycaster.intersectObjects([this.optKeyMesh, this.spaceKeyMesh], false);
-      if (hits.length > 0) {
-        this.triggerKeycapPulse();
-        this.onKeycapClick();
-      }
+    document.addEventListener('vh-demo', (event) => {
+      this.energyTarget = ENERGY[event.detail] ?? 0.4;
+      if (event.detail === 'recognizing') this.sweep = 1;
     });
 
-    // Pause background WebGL loop when document is hidden
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        this.pause();
-      } else if (!this.reducedMotion) {
-        this.resume();
-      }
+    this.darkQuery.addEventListener('change', () => this.applyTheme());
+    this.reducedMotion.addEventListener('change', () => {
+      if (this.reducedMotion.matches) this.stop();
+      else this.start();
     });
 
-    // Listen to contentvisibilityautostatechange on canvas wrapper if applied
-    const wrapper = this.canvas.parentElement;
-    if (wrapper) {
-      wrapper.addEventListener('contentvisibilityautostatechange', (event) => {
-        if (event.skipped) {
-          this.pause();
-        } else if (!this.reducedMotion) {
-          this.resume();
-        }
-      });
-    }
+    new IntersectionObserver(([entry]) => {
+      this.visible = entry.isIntersecting;
+      this.updateRunning();
+    }).observe(this.host);
+    document.addEventListener('visibilitychange', () => this.updateRunning());
   }
 
-  setScrollProgress(progress) {
-    this.scrollProgress = Math.max(0, Math.min(1, progress));
-    if (this.manualFormationOverride === null) {
-      const nextFormation = Math.min(4, Math.floor(this.scrollProgress * 5));
-      if (nextFormation !== this.activeFormation) {
-        this.activeFormation = nextFormation;
-        this.onFormationChange(this.activeFormation);
-      }
-    }
-    if (this.reducedMotion) {
-      this.renderFrame();
-    }
+  updateRunning() {
+    const shouldRun = this.visible && !document.hidden && !this.reducedMotion.matches;
+    if (shouldRun) this.start();
+    else this.stop();
   }
 
-  setFormation(index, isManual = true) {
-    const clamped = Math.max(0, Math.min(4, index));
-    this.activeFormation = clamped;
-    this.manualFormationOverride = isManual ? clamped : null;
-    this.onFormationChange(clamped);
-    if (this.reducedMotion) {
-      this.renderFrame();
-    }
-  }
+  /* ---------- Loop ---------- */
 
-  setRecordingState(isRecording) {
-    this.isRecording = Boolean(isRecording);
-    this.triggerKeycapPulse();
-    if (this.reducedMotion) {
-      this.renderFrame();
-    }
-  }
-
-  updateAudioSpectrum(bandsArray, overallEnergy) {
-    if (bandsArray && bandsArray.length) {
-      for (let i = 0; i < Math.min(24, bandsArray.length); i++) {
-        this.audioBands[i] = bandsArray[i];
-      }
-    }
-    this.audioEnergy = Math.max(0.05, Math.min(1.5, overallEnergy || 0.08));
-  }
-
-  triggerKeycapPulse() {
-    this.keyPressSpring = 1.0;
-    this.shockwaveProgress = 0.01;
-  }
-
-  pause() {
-    this.isPaused = true;
-    if (this.rafId) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-  }
-
-  resume() {
-    if (!this.isPaused) return;
-    this.isPaused = false;
+  start() {
+    if (this.running) return;
+    this.running = true;
     this.clock.getDelta();
-    this.startLoop();
-  }
-
-  startLoop() {
-    if (this.rafId) return;
-    const tick = () => {
-      if (this.isPaused) return;
-      this.renderFrame();
-      this.rafId = requestAnimationFrame(tick);
+    const loop = () => {
+      if (!this.running) return;
+      this.update(Math.min(this.clock.getDelta(), 0.05));
+      this.renderer.render(this.scene, this.camera);
+      this.frame = requestAnimationFrame(loop);
     };
-    this.rafId = requestAnimationFrame(tick);
+    this.frame = requestAnimationFrame(loop);
   }
 
-  renderFrame() {
-    if (!this.renderer || !this.scene || !this.camera) return;
+  stop() {
+    this.running = false;
+    cancelAnimationFrame(this.frame);
+  }
 
-    const dt = Math.min(this.clock.getDelta(), 0.05);
-    const elapsed = this.clock.getElapsedTime();
+  update(dt) {
+    this.time += dt;
+    const t = this.time;
+    this.energy += (this.energyTarget - this.energy) * Math.min(1, dt * 3);
+    this.sweep = Math.max(0, this.sweep - dt * 1.4);
+    this.pointer.lerp(this.pointerTarget, Math.min(1, dt * 3));
 
-    // Smooth pointer interpolation
-    this.pointer.x += (this.targetPointer.x - this.pointer.x) * 0.08;
-    this.pointer.y += (this.targetPointer.y - this.pointer.y) * 0.08;
+    // Bars: a voice-like envelope while listening, a travelling sweep while recognizing.
+    this.bars.forEach((bar, i) => {
+      const voice = 0.5 + 0.5 * Math.sin(t * 7.3 + i * 1.7) * Math.sin(t * 3.1 + i * 0.9);
+      const sweep = this.sweep * Math.max(0, 1 - Math.abs(i - (1 - this.sweep) * 5) / 1.4);
+      const k = 0.55 + 0.5 * this.energy * voice + 0.45 * sweep;
+      const length = Math.max(0.12, bar.userData.base * 2.3 * k);
+      bar.scale.y = length / 1.26;
+    });
 
-    // 1. Deform Acoustic Ferrofluid Core
-    if (this.coreMesh && this.baseCorePositions) {
-      const posAttr = this.coreMesh.geometry.attributes.position;
-      const arr = posAttr.array;
-      const base = this.baseCorePositions;
-      const energy = this.isRecording ? Math.max(0.42, this.audioEnergy * 1.35) : this.audioEnergy;
+    // Tile floats and turns towards the pointer.
+    this.tileGroup.rotation.y = -0.38 + this.pointer.x * 0.35 + Math.sin(t * 0.6) * 0.06;
+    this.tileGroup.rotation.x = 0.16 + this.pointer.y * 0.25 + Math.cos(t * 0.5) * 0.04;
+    this.tileGroup.position.y = Math.sin(t * 0.9) * 0.12;
 
-      for (let i = 0; i < arr.length; i += 3) {
-        const bx = base[i];
-        const by = base[i + 1];
-        const bz = base[i + 2];
-        const wave =
-          Math.sin(bx * 2.6 + elapsed * 2.4) *
-          Math.cos(by * 2.6 - elapsed * 1.9) *
-          Math.sin(bz * 2.2 + elapsed * 1.5);
-        const scale = 1 + wave * (0.09 + energy * 0.28);
-        arr[i] = bx * scale;
-        arr[i + 1] = by * scale;
-        arr[i + 2] = bz * scale;
-      }
-      posAttr.needsUpdate = true;
+    this.rings.rotation.z = t * 0.03;
+    this.ringUniforms.uTime.value = t;
+    this.ringUniforms.uEnergy.value = this.energy;
+  }
 
-      this.coreGroup.rotation.y = elapsed * 0.18 + this.pointer.x * 0.35;
-      this.coreGroup.rotation.x = Math.sin(elapsed * 0.3) * 0.12 - this.pointer.y * 0.25;
-      this.coreWireframe.rotation.y = -elapsed * 0.24;
-    }
-
-    // 2. Animate 5 VoiceHelper Harmonic Wave Pillars
-    if (this.pillars) {
-      this.pillars.forEach((pillar, idx) => {
-        const bandIdx = idx * 4 + 2;
-        const bandVal = this.audioBands[bandIdx] || 0.1;
-        const idlePulse = Math.sin(elapsed * 3.2 + idx * 0.85) * 0.16 + 0.18;
-        const boost = this.isRecording ? bandVal * 1.25 : bandVal * 0.55 + idlePulse;
-        const targetScaleY = Math.max(0.45, Math.min(2.1, 0.72 + boost));
-        pillar.scale.y += (targetScaleY - pillar.scale.y) * 0.18;
-        pillar.material.emissiveIntensity = this.isRecording ? 1.15 : 0.55 + boost * 0.4;
-      });
-      this.pillarsGroup.rotation.y = this.pointer.x * 0.28;
-      this.pillarsGroup.rotation.x = -this.pointer.y * 0.18;
-    }
-
-    // 3. Animate Orbital Gyroscope Reticle & Shockwave
-    if (this.rings) {
-      this.rings[0].rotation.z = elapsed * 0.22;
-      this.rings[1].rotation.x = -0.45 + Math.sin(elapsed * 0.4) * 0.2;
-      this.rings[1].rotation.y = elapsed * 0.16;
-      this.rings[2].rotation.z = -elapsed * 0.14;
-    }
-
-    if (this.shockwaveProgress > 0) {
-      this.shockwaveProgress += dt * 1.85;
-      const s = 1 + this.shockwaveProgress * 2.2;
-      this.shockwaveRing.scale.set(s, s, 1);
-      this.shockwaveRing.material.opacity = Math.max(0, (1 - this.shockwaveProgress) * 0.65);
-      if (this.shockwaveProgress >= 1) {
-        this.shockwaveProgress = 0;
-        this.shockwaveRing.material.opacity = 0;
-      }
-    }
-
-    // 4. Caret Sculpture Visibility
-    if (this.caretMat) {
-      const showCaret = this.activeFormation === 1 || this.isRecording;
-      const targetOpacity = showCaret ? (0.45 + 0.45 * Math.sin(elapsed * 6.0) * 0.5 + 0.25) : 0.04;
-      this.caretMat.opacity += (targetOpacity - this.caretMat.opacity) * 0.12;
-      this.caretGroup.position.y = 0.1 + Math.sin(elapsed * 2.0) * 0.08;
-    }
-
-    // 5. Keycap Spring Physics
-    if (this.keycapsGroup) {
-      this.keyPressSpring *= 0.84;
-      const pressY = -this.keyPressSpring * 0.16;
-      this.optKeyMesh.position.y = pressY;
-      this.spaceKeyMesh.position.y = pressY;
-      this.keycapsGroup.rotation.y = this.pointer.x * 0.2;
-    }
-
-    // 6. Morph 2,400 Particles toward Active Formation
-    if (this.particles && this.formations[this.activeFormation]) {
-      const target = this.formations[this.activeFormation];
-      const posAttr = this.particles.geometry.attributes.position;
-      const arr = posAttr.array;
-      const lerpFactor = 0.07;
-      const radialBoost = this.isRecording ? 1 + this.audioEnergy * 0.22 : 1;
-
-      for (let i = 0; i < this.particleCount; i++) {
-        const i3 = i * 3;
-        const tx = target[i3] * radialBoost;
-        const ty = target[i3 + 1] * radialBoost;
-        const tz = target[i3 + 2] * radialBoost;
-
-        arr[i3] += (tx - arr[i3]) * lerpFactor;
-        arr[i3 + 1] += (ty - arr[i3 + 1]) * lerpFactor;
-        arr[i3 + 2] += (tz - arr[i3 + 2]) * lerpFactor;
-      }
-      posAttr.needsUpdate = true;
-      this.particles.rotation.y = elapsed * 0.08 + this.pointer.x * 0.22;
-      this.particles.rotation.x = -this.pointer.y * 0.15;
-    }
-
-    // 7. Dynamic Lighting when recording
-    if (this.emeraldLight) {
-      const targetEmerald = this.isRecording ? 22 : 0;
-      this.emeraldLight.intensity += (targetEmerald - this.emeraldLight.intensity) * 0.12;
-    }
-
+  renderOnce() {
+    if (this.running) return;
+    this.update(0);
     this.renderer.render(this.scene, this.camera);
   }
 }
