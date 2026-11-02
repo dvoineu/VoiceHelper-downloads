@@ -73,8 +73,19 @@
       {
         "@type": "VideoObject",
         "@id": "https://dvoineu.github.io/VoiceHelper-downloads/#video",
-        "name": "Frazia setup guide (Russian)",
-        "description": "Russian narration by DAV. Install Frazia, allow permissions, choose a recognition model, set up the Option-Space shortcut and use voice commands.",
+        "name": "Frazia setup guide",
+        "description": "Install Frazia, allow permissions, choose a recognition model, set up the Option-Space shortcut and use voice commands.",
+        "thumbnailUrl": "https://dvoineu.github.io/VoiceHelper-downloads/media/frazia-guide-en-poster.jpg",
+        "contentUrl": "https://dvoineu.github.io/VoiceHelper-downloads/media/frazia-guide-en.mp4",
+        "uploadDate": "2026-11-02",
+        "duration": "PT3M12S",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "VideoObject",
+        "@id": "https://dvoineu.github.io/VoiceHelper-downloads/#video-ru",
+        "name": "Frazia: видеоинструкция",
+        "description": "Установка Frazia, разрешения macOS, выбор модели распознавания, клавиши Option-Space и голосовые команды.",
         "thumbnailUrl": "https://dvoineu.github.io/VoiceHelper-downloads/media/frazia-guide-poster.jpg",
         "contentUrl": "https://dvoineu.github.io/VoiceHelper-downloads/media/frazia-guide-ru-dav-v4.mp4",
         "uploadDate": "2026-11-01",
@@ -350,31 +361,30 @@
         <div class="section-head">
           <p class="kicker" data-i18n="videoKicker">Video guide</p>
           <h2 data-i18n="videoTitle">See the whole setup in 3 minutes</h2>
-          <p class="section-sub" data-i18n="videoSubtitle">Installation, permissions, model, shortcuts and voice commands. Russian narration by DAV with built-in subtitles.</p>
-          <p class="video-lang-note" data-i18n="videoLangNote">The video is in Russian. Every step is also described above in English.</p>
+          <p class="section-sub" data-i18n="videoSubtitle">Installation, permissions, model, shortcuts and voice commands. Subtitles are part of the video, so you can watch without sound.</p>
         </div>
         <div class="video-layout">
           <div class="video-frame">
-            <video id="guide-video" controls playsinline preload="none" poster="./media/frazia-guide-poster.jpg" width="1920" height="1080">
-              <source src="./media/frazia-guide-ru-dav-v4.mp4" type="video/mp4">
-              <p><span data-i18n="videoFallback">Your browser can’t play this video.</span> <a href="./media/frazia-guide-ru-dav-v4.mp4" data-i18n="videoDownload">Download the video (MP4)</a></p>
+            <video id="guide-video" controls playsinline preload="none" poster="./media/frazia-guide-en-poster.jpg" width="1920" height="1080">
+              <source src="./media/frazia-guide-en.mp4" type="video/mp4">
+              <p><span data-i18n="videoFallback">Your browser can’t play this video.</span> <a href="./media/frazia-guide-en.mp4" data-video-link data-i18n="videoDownload">Download the video (MP4)</a></p>
             </video>
           </div>
           <nav class="chapters" aria-labelledby="chapters-heading">
             <h3 id="chapters-heading" data-i18n="chaptersHeading">Chapters</h3>
             <ol>
               <li><button type="button" data-seek="0"><span class="time">0:00</span><span data-i18n="chapter1">What Frazia is</span></button></li>
-              <li><button type="button" data-seek="12"><span class="time">0:12</span><span data-i18n="chapter2">Installation</span></button></li>
-              <li><button type="button" data-seek="27"><span class="time">0:27</span><span data-i18n="chapter3">macOS permissions</span></button></li>
-              <li><button type="button" data-seek="54"><span class="time">0:54</span><span data-i18n="chapter4">Microphone check</span></button></li>
-              <li><button type="button" data-seek="65"><span class="time">1:05</span><span data-i18n="chapter5">Choosing a model</span></button></li>
-              <li><button type="button" data-seek="98"><span class="time">1:38</span><span data-i18n="chapter6">Shortcuts (⌥ Space)</span></button></li>
-              <li><button type="button" data-seek="134"><span class="time">2:14</span><span data-i18n="chapter7">Dictation in action</span></button></li>
-              <li><button type="button" data-seek="159"><span class="time">2:39</span><span data-i18n="chapter8">Voice commands</span></button></li>
-              <li><button type="button" data-seek="173"><span class="time">2:53</span><span data-i18n="chapter9">Menu and History</span></button></li>
-              <li><button type="button" data-seek="187"><span class="time">3:07</span><span data-i18n="chapter10">Cheat sheet</span></button></li>
+              <li><button type="button" data-seek="13"><span class="time">0:13</span><span data-i18n="chapter2">Installation</span></button></li>
+              <li><button type="button" data-seek="28"><span class="time">0:28</span><span data-i18n="chapter3">macOS permissions</span></button></li>
+              <li><button type="button" data-seek="52"><span class="time">0:52</span><span data-i18n="chapter4">Microphone check</span></button></li>
+              <li><button type="button" data-seek="62"><span class="time">1:02</span><span data-i18n="chapter5">Choosing a model</span></button></li>
+              <li><button type="button" data-seek="94"><span class="time">1:34</span><span data-i18n="chapter6">Shortcuts (⌥ Space)</span></button></li>
+              <li><button type="button" data-seek="126"><span class="time">2:06</span><span data-i18n="chapter7">Dictation in action</span></button></li>
+              <li><button type="button" data-seek="152"><span class="time">2:32</span><span data-i18n="chapter8">Voice commands</span></button></li>
+              <li><button type="button" data-seek="165"><span class="time">2:45</span><span data-i18n="chapter9">Menu and History</span></button></li>
+              <li><button type="button" data-seek="179"><span class="time">2:59</span><span data-i18n="chapter10">Cheat sheet</span></button></li>
             </ol>
-            <a class="text-link" href="./media/frazia-guide-ru-dav-v4.mp4" download data-i18n="videoDownload">Download the video (MP4)</a>
+            <a class="text-link" href="./media/frazia-guide-en.mp4" download data-video-link data-i18n="videoDownload">Download the video (MP4)</a>
           </nav>
         </div>
       </div>

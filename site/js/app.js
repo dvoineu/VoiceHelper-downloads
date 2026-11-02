@@ -132,6 +132,7 @@ function applyLanguage(lang) {
     else link.removeAttribute('aria-current');
   });
 
+  applyVideoLanguage(currentLanguage);
   demo.restart();
 }
 
@@ -212,11 +213,37 @@ document.addEventListener('visibilitychange', () => {
 
 /* ---------- Video chapters ---------- */
 
+/* ---------- Video guide: one video per language ---------- */
+
+const VIDEOS = {
+  en: { src: './media/frazia-guide-en.mp4', poster: './media/frazia-guide-en-poster.jpg', chapters: [0, 13, 28, 52, 62, 94, 126, 152, 165, 179] },
+  ru: { src: './media/frazia-guide-ru-dav-v4.mp4', poster: './media/frazia-guide-poster.jpg', chapters: [0, 12, 27, 54, 65, 98, 134, 159, 173, 187] },
+};
+
+const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+function applyVideoLanguage(lang) {
+  const video = document.getElementById('guide-video');
+  const info = VIDEOS[lang] || VIDEOS.en;
+  if (!video) return;
+  const source = video.querySelector('source');
+  if (source && source.getAttribute('src') !== info.src) {
+    source.setAttribute('src', info.src);
+    video.setAttribute('poster', info.poster);
+    video.load();
+  }
+  document.querySelectorAll('[data-video-link]').forEach((a) => { a.href = info.src; });
+  document.querySelectorAll('[data-seek]').forEach((button, i) => {
+    button.dataset.seek = String(info.chapters[i]);
+    const time = button.querySelector('.time');
+    if (time) time.textContent = formatTime(info.chapters[i]);
+  });
+}
+
 function setupChapters() {
   const video = document.getElementById('guide-video');
   if (!video) return;
   const buttons = [...document.querySelectorAll('[data-seek]')];
-  const starts = buttons.map((b) => Number(b.dataset.seek));
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -235,7 +262,7 @@ function setupChapters() {
 
   video.addEventListener('timeupdate', () => {
     let active = 0;
-    starts.forEach((start, i) => { if (video.currentTime >= start) active = i; });
+    buttons.forEach((b, i) => { if (video.currentTime >= Number(b.dataset.seek)) active = i; });
     buttons.forEach((b, i) => {
       if (i === active) b.setAttribute('aria-current', 'true');
       else b.removeAttribute('aria-current');
