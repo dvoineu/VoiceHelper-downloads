@@ -114,6 +114,8 @@ class FraziaSiteTests(unittest.TestCase):
             SITE_DIR / "vendor" / "LICENSE.txt",
             SITE_DIR / "media" / "frazia-guide-ru-dav-v4.mp4",
             SITE_DIR / "media" / "frazia-guide-poster.jpg",
+            SITE_DIR / "media" / "frazia-guide-en.mp4",
+            SITE_DIR / "media" / "frazia-guide-en-poster.jpg",
             SITE_DIR / "robots.txt",
             SITE_DIR / "sitemap.xml",
             SITE_DIR / "site.webmanifest",
@@ -217,8 +219,7 @@ class FraziaSiteTests(unittest.TestCase):
         missing = used - set(dictionary["en"])
         self.assertFalse(missing, f"Keys used in HTML but missing from i18n.js: {sorted(missing)}")
         for key in collector.keys["text"] + collector.keys["html"]:
-            if key != "videoLangNote":
-                self.assertTrue(dictionary["en"][key] and dictionary["ru"][key], key)
+            self.assertTrue(dictionary["en"][key] and dictionary["ru"][key], key)
 
     def test_english_html_fallback_matches_dictionary(self):
         dictionary = load_dictionary()["en"]
@@ -232,14 +233,21 @@ class FraziaSiteTests(unittest.TestCase):
 
     def test_video_guide_and_chapters(self):
         html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
-        self.assertIn('src="./media/frazia-guide-ru-dav-v4.mp4"', html)
-        self.assertIn('poster="./media/frazia-guide-poster.jpg"', html)
+        self.assertIn('src="./media/frazia-guide-en.mp4"', html)
+        self.assertIn('poster="./media/frazia-guide-en-poster.jpg"', html)
         seeks = [int(value) for value in re.findall(r'data-seek="(\d+)"', html)]
         self.assertEqual(len(seeks), 10)
-        self.assertEqual(seeks, sorted(seeks))
-        self.assertLess(seeks[-1], 201)
-        video = SITE_DIR / "media" / "frazia-guide-ru-dav-v4.mp4"
-        self.assertLess(video.stat().st_size, 20 * 1024 * 1024)
+        app_js = (SITE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+        for lang, path, limit in [("en", "frazia-guide-en.mp4", 192), ("ru", "frazia-guide-ru-dav-v4.mp4", 201)]:
+            self.assertIn(f"src: './media/{path}'", app_js)
+            match = re.search(lang + r": \{[^}]*chapters: \[([\d, ]+)\]", app_js)
+            self.assertIsNotNone(match, lang)
+            chapters = [int(v) for v in match.group(1).split(",")]
+            self.assertEqual(len(chapters), 10, lang)
+            self.assertEqual(chapters, sorted(chapters), lang)
+            self.assertLess(chapters[-1], limit, lang)
+            self.assertLess((SITE_DIR / "media" / path).stat().st_size, 20 * 1024 * 1024, path)
+        self.assertEqual(seeks, [int(v) for v in re.search(r"en: \{[^}]*chapters: \[([\d, ]+)\]", app_js).group(1).split(",")])
 
     def test_sitemap_and_manifest_valid(self):
         manifest = json.loads((SITE_DIR / "site.webmanifest").read_text(encoding="utf-8"))
