@@ -1,7 +1,7 @@
 import * as THREE from '../vendor/three.module.min.js';
 
 /**
- * Hero 3D scene: the VoiceHelper icon as a glossy tile whose five white
+ * Hero 3D scene: the Frazia icon as a glossy tile whose five white
  * wave bars react to the dictation demo, emitting rings of sound particles.
  *
  * - Anchored to a DOM element (.stage-anchor), so it follows the layout.

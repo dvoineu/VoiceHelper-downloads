@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE_DIR = ROOT / "site"
 PUBLIC_SITE = "https://dvoineu.github.io/VoiceHelper-downloads/"
 PUBLIC_REPO = "https://github.com/dvoineu/VoiceHelper-downloads"
-RELEASE = PUBLIC_REPO + "/releases/download/v1.1-build.4/"
+RELEASE = PUBLIC_REPO + "/releases/download/v1.1-build.5/"
 
 
 class SemanticHTMLInspector(HTMLParser):
@@ -102,7 +102,7 @@ def load_dictionary():
     }
 
 
-class VoiceHelperSiteTests(unittest.TestCase):
+class FraziaSiteTests(unittest.TestCase):
     def test_site_files_exist(self):
         required = [
             SITE_DIR / "index.html",
@@ -112,8 +112,8 @@ class VoiceHelperSiteTests(unittest.TestCase):
             SITE_DIR / "js" / "scene3d.js",
             SITE_DIR / "vendor" / "three.module.min.js",
             SITE_DIR / "vendor" / "LICENSE.txt",
-            SITE_DIR / "media" / "voicehelper-guide-ru.mp4",
-            SITE_DIR / "media" / "voicehelper-guide-poster.jpg",
+            SITE_DIR / "media" / "frazia-guide-ru.mp4",
+            SITE_DIR / "media" / "frazia-guide-poster.jpg",
             SITE_DIR / "robots.txt",
             SITE_DIR / "sitemap.xml",
             SITE_DIR / "site.webmanifest",
@@ -225,25 +225,25 @@ class VoiceHelperSiteTests(unittest.TestCase):
         collector = I18nTextCollector()
         collector.feed((SITE_DIR / "index.html").read_text(encoding="utf-8"))
         for key, texts in collector.texts.items():
-            value = dictionary[key].replace("{version}", "1.1").replace("{build}", "4")
+            value = dictionary[key].replace("{version}", "1.1").replace("{build}", "5")
             expected = " ".join(value.replace("&amp;", "&").split())
             for text in texts:
                 self.assertEqual(text, expected, key)
 
     def test_video_guide_and_chapters(self):
         html = (SITE_DIR / "index.html").read_text(encoding="utf-8")
-        self.assertIn('src="./media/voicehelper-guide-ru.mp4"', html)
-        self.assertIn('poster="./media/voicehelper-guide-poster.jpg"', html)
+        self.assertIn('src="./media/frazia-guide-ru.mp4"', html)
+        self.assertIn('poster="./media/frazia-guide-poster.jpg"', html)
         seeks = [int(value) for value in re.findall(r'data-seek="(\d+)"', html)]
         self.assertEqual(len(seeks), 10)
         self.assertEqual(seeks, sorted(seeks))
         self.assertLess(seeks[-1], 201)
-        video = SITE_DIR / "media" / "voicehelper-guide-ru.mp4"
+        video = SITE_DIR / "media" / "frazia-guide-ru.mp4"
         self.assertLess(video.stat().st_size, 20 * 1024 * 1024)
 
     def test_sitemap_and_manifest_valid(self):
         manifest = json.loads((SITE_DIR / "site.webmanifest").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["short_name"], "VoiceHelper")
+        self.assertEqual(manifest["short_name"], "Frazia")
         self.assertGreaterEqual(len(manifest["icons"]), 3)
 
         tree = ET.fromstring((SITE_DIR / "sitemap.xml").read_text(encoding="utf-8"))
@@ -255,8 +255,8 @@ class VoiceHelperSiteTests(unittest.TestCase):
         inspector.feed(html)
         buttons = {a.get("data-i18n"): a for a in inspector.anchors}
         for key, filename in {
-            "dlBtnDmg": "VoiceHelper-1.1-4-arm64.dmg",
-            "dlBtnZip": "VoiceHelper-1.1-4-arm64.zip",
+            "dlBtnDmg": "Frazia-1.1-5-arm64.dmg",
+            "dlBtnZip": "Frazia-1.1-5-arm64.zip",
             "dlInstall": "INSTALL.txt",
             "dlChecksums": "SHA256SUMS",
         }.items():
@@ -303,7 +303,7 @@ class VoiceHelperSiteTests(unittest.TestCase):
     def test_english_html_fallback_and_language_links(self):
         html = (SITE_DIR / "index.html").read_text()
         self.assertIn('<html lang="en">', html)
-        self.assertIn('>Install VoiceHelper on your Mac</h2>', html)
+        self.assertIn('>Install Frazia on your Mac</h2>', html)
         inspector = SemanticHTMLInspector()
         inspector.feed(html)
         languages = {a["data-language"]: a for a in inspector.anchors if "data-language" in a}
@@ -321,14 +321,14 @@ class VoiceHelperSiteTests(unittest.TestCase):
         html = (SITE_DIR / "index.html").read_text()
         dictionary = (SITE_DIR / "js/i18n.js").read_text()
         self.assertIn('id="whats-new"', html)
-        self.assertIn('>What’s new in VoiceHelper</h2>', html)
+        self.assertIn('>What’s new in Frazia</h2>', html)
         for key in ["newKicker", "newTitle", "newSubtitle", "newSetupTitle", "newSetupBody",
                     "newTrialTitle", "newTrialBody", "newModelTitle", "newModelBody", "newPreserved", "newFullNotes"]:
             self.assertIn('data-i18n="' + key + '"', html)
             self.assertEqual(len(re.findall(r'\b' + key + r':\s*[\'\"][^\'\"]+', dictionary)), 2, key)
-        self.assertIn(PUBLIC_REPO + "/releases/tag/v1.1-build.4", html)
+        self.assertIn(PUBLIC_REPO + "/releases/tag/v1.1-build.5", html)
         self.assertNotIn("v1.1-build.3", html)
-        self.assertIn('VoiceHelper <span data-release="label">1.1 (4)</span>', html)
+        self.assertIn('Frazia <span data-release="label">1.1 (5)</span>', html)
 
 
 if __name__ == "__main__":

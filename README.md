@@ -1,4 +1,4 @@
-# VoiceHelper for macOS
+# Frazia for macOS
 
 [Website](https://dvoineu.github.io/VoiceHelper-downloads/) · [Downloads and release notes](https://github.com/dvoineu/VoiceHelper-downloads/releases)
 
@@ -23,21 +23,25 @@ both interface languages.
 
 ## Download and install
 
-VoiceHelper 1.1 (build 4) requires **macOS 13+ and Apple Silicon (M1 or later)**.
+When upgrading from VoiceHelper, quit it and move VoiceHelper.app out of Applications before installing Frazia. Keep your Library folders for saved dictations and models.
+
+При переходе с VoiceHelper завершите его и уберите VoiceHelper.app из «Программ». Оставьте папки в Библиотеке на месте.
+
+Frazia 1.1 (build 5) requires **macOS 13+ and Apple Silicon (M1 or later)**.
 The application is Developer ID signed and Apple notarized. This release does
 not include an Intel build or an automatic updater.
 
-- [Download DMG](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.dmg)
-- [Download ZIP](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/VoiceHelper-1.1-4-arm64.zip)
-- [Installation instructions / Инструкция установки](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/INSTALL.txt)
-- [SHA-256 checksums](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.4/SHA256SUMS)
+- [Download DMG](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.5/Frazia-1.1-5-arm64.dmg)
+- [Download ZIP](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.5/Frazia-1.1-5-arm64.zip)
+- [Installation instructions / Инструкция установки](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.5/INSTALL.txt)
+- [SHA-256 checksums](https://github.com/dvoineu/VoiceHelper-downloads/releases/download/v1.1-build.5/SHA256SUMS)
 
-Open the DMG (or extract the ZIP), drag VoiceHelper.app into Applications, and
+Open the DMG (or extract the ZIP), drag Frazia.app into Applications, and
 launch it. Follow setup for Microphone and Accessibility, choose recognition,
 and try a phrase in its test field. Setup can be resumed or reopened from the menu.
 Existing settings, API keys and downloaded models are preserved.
 
-Скачайте DMG или ZIP, перенесите VoiceHelper.app в «Программы» и запустите.
+Скачайте DMG или ZIP, перенесите Frazia.app в «Программы» и запустите.
 Пройдите мастер доступа к микрофону, универсального доступа и распознавания,
 затем продиктуйте пробную фразу. Мастер можно продолжить или открыть из меню;
 настройки, API-ключи и скачанные модели сохраняются.
@@ -66,9 +70,9 @@ are attached to Releases and are never stored in the Git history or Pages artifa
 
 The website's download buttons follow the latest published release on their own:
 on load the page asks the GitHub API for `releases/latest` and points the DMG, ZIP,
-INSTALL.txt and SHA256SUMS links at its assets, and shows its version. A release
-is picked up when it is published (not draft, not pre-release) with a `.dmg` asset
-and a tag like `v1.2-build.5`. Without JavaScript, or if the API is unreachable,
+INSTALL.txt and SHA256SUMS links at its assets, and shows its version. The release tag must match `v<version>-build.<build>` and contain
+both `Frazia-<version>-<build>-arm64` installers (DMG and ZIP), `INSTALL.txt`
+and `SHA256SUMS`. Without JavaScript, or if the API is unreachable,
 the links written in `index.html` are used.
 
 When releasing another version, upload verified versioned assets and checksums

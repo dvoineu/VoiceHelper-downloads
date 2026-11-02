@@ -4,6 +4,10 @@
 
 ## English
 
+### Frazia 1.1 (5)
+
+VoiceHelper is now Frazia. Quit VoiceHelper and remove the old app from Applications before installing Frazia. Your settings, saved dictations, models and API keys use their existing locations.
+
 ### 1.1 (4) — 2026-11-01
 
 - New setup window guides you through microphone access, Accessibility, recognition and a trial dictation.
@@ -22,6 +26,10 @@ First public Developer ID signed and Apple notarized DMG/ZIP for Apple Silicon, 
 [Previous release](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.3).
 
 ## Русский
+
+### Frazia 1.1 (5)
+
+VoiceHelper теперь называется Frazia. Перед установкой завершите VoiceHelper и уберите старое приложение из «Программ». Frazia использует прежние настройки, историю диктовок, модели и API-ключи.
 
 ### 1.1 (4) — 2026-11-01
 

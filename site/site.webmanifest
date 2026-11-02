@@ -1,6 +1,6 @@
 {
-  "name": "VoiceHelper — voice typing for Mac at your text cursor",
-  "short_name": "VoiceHelper",
+  "name": "Frazia — voice typing for Mac at your text cursor",
+  "short_name": "Frazia",
   "description": "Free voice typing for Mac. Press Option-Space in any app, speak, and the text appears at your cursor. Offline Whisper recognition on Apple Silicon.",
   "start_url": "./",
   "display": "standalone",
