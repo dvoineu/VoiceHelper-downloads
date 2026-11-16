@@ -4,6 +4,13 @@
 
 ## English
 
+### Frazia 1.1 (10)
+
+- Usage analytics now runs automatically in the production app without a consent prompt, including after an upgrade with a previously saved refusal. Audio and dictation text are not included.
+- Existing installation identities are preserved across updates, so restarting or upgrading does not repeat the first-observed event.
+
+[Download and full release notes](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.10).
+
 ### Frazia 1.1 (5)
 
 VoiceHelper is now Frazia. Quit VoiceHelper and remove the old app from Applications before installing Frazia. Your settings, saved dictations, models and API keys use their existing locations.
@@ -26,6 +33,13 @@ First public Developer ID signed and Apple notarized DMG/ZIP for Apple Silicon, 
 [Previous release](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.3).
 
 ## Русский
+
+### Frazia 1.1 (10)
+
+- Аналитика использования теперь включена автоматически в production-приложении без запроса согласия, в том числе после обновления с ранее сохранённым отказом. Аудио и текст диктовок не передаются.
+- При обновлении сохраняется идентификатор установки: перезапуск и обновление не создают повторного события первого наблюдаемого запуска.
+
+[Скачать и прочитать полное описание](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.10).
 
 ### Frazia 1.1 (5)
 
