@@ -6,10 +6,10 @@
 
 ### Frazia 1.2 (12)
 
-- Added four hardware-aware offline recognition modes matched to your Mac’s chip and memory: **Ultra-fast**, **Standard**, **High accuracy**, and **Maximum accuracy** (two-model cross-check, 16 GB+ RAM), with **Recommended for your Mac** guidance and quick switching in **Settings → Recognition** and the menu bar.
-- Added native Apple Silicon **MLX** text cleanup (**Qwen 3.5** / **Gemma 4 Text**) and bundled **Gemma 4 Audio** (`llama.cpp`) cross-checking alongside **Whisper Large v3 Turbo**, with selectable **Fix errors and punctuation** or **Remove fillers and polish** styles (cleans hesitation sounds and spoken self-corrections).
-- Added one-click sequential mode downloads showing exact remaining download size (`Download X.X GB`), estimated RAM, total disk footprint, and one-click **Remove Unused** storage cleanup that preserves your active mode.
-- Added **Silero VAD** silence trimming and pause-aligned chunking (>25 s), **Custom words** with sentence-framed Whisper prompting, and automatic speech-engine eviction before cleanup on 8 GB Macs (~3 GB peak RAM). Requires **macOS 15 Sequoia or later** on Apple Silicon (`arm64`).
+- **Four offline modes matched to your Mac:** **Ultra-fast**, **Standard**, **High accuracy**, and **Maximum accuracy** (two-model cross-check, 16 GB+ RAM), with **Recommended for your Mac** guidance and quick switching in **Settings → Recognition** and the menu bar.
+- **On-device text cleanup and two-model cross-check:** Built-in offline refinement fixes punctuation and typos directly on your Mac, with selectable **Fix errors and punctuation** or **Remove fillers and polish** styles; **Maximum accuracy** cross-checks complex speech with two models.
+- **One-click downloads and storage cleanup:** Shows exact download size and estimated memory usage, downloads all required models sequentially, and frees disk space anytime with **Remove Unused** without affecting your active mode.
+- **Custom words and better long dictation:** Added **Settings → Recognition → Custom words**, pause-aligned splitting with silence trimming for long recordings, automatic memory release between steps on 8 GB Macs, and idle model unloading after 5 minutes. Requires **macOS 15 Sequoia or later** on Apple Silicon.
 
 [Download and full release notes](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.2-build.12).
 
@@ -77,10 +77,10 @@ First public Developer ID signed and Apple notarized DMG/ZIP for Apple Silicon, 
 
 ### Frazia 1.2 (12)
 
-- Добавлены четыре офлайн-режима распознавания, подбираемые под процессор и RAM вашего Mac: **Ультрабыстрый**, **Сбалансированный**, **Высокая точность** и **Максимальная точность** (сверка двумя моделями, от 16 ГБ RAM), с бейджем **«Рекомендуется для вашего Mac»** и переключением в **Настройках → Распознавание** и в меню-баре.
-- Добавлена локальная правка текста на Apple Silicon через **MLX** (**Qwen 3.5** / **Gemma 4 Text**) и сверка со встроенным **Gemma 4 Audio** (`llama.cpp`) в паре с **Whisper Large v3 Turbo**; доступны стили **«Исправлять ошибки и пунктуацию»** и **«Убирать слова-паразиты и оговорки»**.
-- Добавлена загрузка режима в один клик с точным объёмом докачки (`Скачать X,X ГБ`), оценкой RAM, размером на диске и очисткой лишних моделей кнопкой **«Удалить лишние»** без затрагивания активного режима.
-- Добавлены обрезка тишины и нарезка длинных записей (>25 с) по паузам **Silero VAD**, **Словарь терминов** (`Custom words`) и автоматическая выгрузка речевой модели перед корректором на Mac с 8 ГБ RAM (пик ~3 ГБ). Требуется **macOS 15 Sequoia и новее** на Apple Silicon (`arm64`).
+- **Четыре готовых офлайн-режима под ваш Mac:** **Ультрабыстрый**, **Сбалансированный**, **Высокая точность** и **Максимальная точность** (сверка двумя моделями, для Mac с 16 ГБ RAM и выше), с бейджем **«Рекомендуем для вашего Mac»** и переключением в **Настройки → Распознавание** или прямо из меню-бара.
+- **Локальная правка текста и сверка двумя моделями:** встроенная офлайн-правка исправляет пунктуацию и опечатки прямо на Mac; доступны стили **«Исправлять ошибки и пунктуацию»** и **«Убирать паузы и слова-паразиты»**, а режим **«Максимальная точность»** сверяет сложные фразы двумя моделями.
+- **Загрузка режимов в один клик и очистка диска:** перед скачиванием виден точный объём загрузки и ориентировочный расход памяти, нужные модели скачиваются по очереди, а кнопка **«Удалить лишние»** освобождает место на диске без затрагивания активного режима.
+- **Словарь терминов и улучшенная длинная диктовка:** добавлен **Словарь терминов** (**Настройки → Распознавание**), деление длинных записей по естественным паузам с обрезкой тишины, автоматическое освобождение памяти между этапами на Mac с 8 ГБ RAM и выгрузка моделей через 5 минут простоя. Требуется **macOS 15 Sequoia и новее** на Apple Silicon.
 
 [Скачать и прочитать полное описание](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.2-build.12).
 
