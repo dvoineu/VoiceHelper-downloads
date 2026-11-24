@@ -4,6 +4,13 @@
 
 ## English
 
+### Frazia 1.2.1 (13)
+
+- **Cleaner in-app update notes:** **Check for Updates…** now shows release notes only in your macOS language, without internal verification details or raw checksums.
+- Includes all **Frazia 1.2** features (four hardware-aware offline recognition modes, on-device text cleanup and two-model cross-check, one-click downloads and **Remove Unused**, **Custom words**, pause-aligned long dictation). Requires **macOS 15 Sequoia or later** on Apple Silicon.
+
+[Download and full release notes](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.2.1-build.13).
+
 ### Frazia 1.2 (12)
 
 - **Four offline modes matched to your Mac:** **Ultra-fast**, **Standard**, **High accuracy**, and **Maximum accuracy** (two-model cross-check, 16 GB+ RAM), with **Recommended for your Mac** guidance and quick switching in **Settings → Recognition** and the menu bar.
@@ -74,6 +81,13 @@ First public Developer ID signed and Apple notarized DMG/ZIP for Apple Silicon, 
 [Previous release](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.1-build.3).
 
 ## Русский
+
+### Frazia 1.2.1 (13)
+
+- **Чистое окно обновлений на вашем языке:** в **«Проверить обновления…»** теперь показывается только список изменений на языке вашей macOS — без служебных отчётов о проверках и контрольных сумм.
+- Включает все возможности **Frazia 1.2** (четыре офлайн-режима под ваш Mac, локальная правка текста и сверка двумя моделями, загрузка в один клик и кнопка **«Удалить лишние»**, **Словарь терминов**, деление длинных записей по паузам). Требуется **macOS 15 Sequoia и новее** на Apple Silicon.
+
+[Скачать и прочитать полное описание](https://github.com/dvoineu/VoiceHelper-downloads/releases/tag/v1.2.1-build.13).
 
 ### Frazia 1.2 (12)
 
